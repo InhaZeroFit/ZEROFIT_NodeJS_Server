@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-module.exports = class Wardrobe extends Sequelize.Model {
+class Wardrobe extends Sequelize.Model {
     static init(sequelize) {
         return super.init({
             wardrobe_id : {
@@ -23,8 +23,10 @@ module.exports = class Wardrobe extends Sequelize.Model {
     }
     static associate(db) {
         db.Wardrobe.belongsTo(db.User, {
-            foreignKey: "user_id",  // Wardrobe 테이블의 외래 키
-            targetKey: "user_id"    // User 테이블의 기본 키
+            foreignKey: "user_id",  // FK of wardrobes table
+            targetKey: "user_id"    // PK of users table
         });
     }
 }
+
+module.exports = Wardrobe;

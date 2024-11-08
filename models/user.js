@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-module.exports = class User extends Sequelize.Model {
+class User extends Sequelize.Model {
     static init(sequelize) {
         return super.init({
             user_id : {
@@ -33,19 +33,21 @@ module.exports = class User extends Sequelize.Model {
             },
         }, {
             sequelize,
-            timestamps : true, //create automatically createdAt, updatedAt
+            timestamps : true, // create automatically createdAt, updatedAt
             underscored : true, // set snake_case
             modelName : "User",
             tableName : "users",
             paranoid : true,
             charset : "utf8",
-            collate : "utf8_general_ci",
+            collate : "utf8_general_ci", // utf8_general_ci : option of Korean
         })
     }
     static associate(db) {
         db.User.hasMany(db.Wardrobe, {
-            foreignKey: "user_id",   // Wardrobe 테이블의 외래 키
-            sourceKey: "user_id"     // User 테이블의 기본 키
+            foreignKey: "user_id",   // FK of wardrobes table
+            sourceKey: "user_id"     // PK of users table
         });
     }
 }
+
+module.exports = User;

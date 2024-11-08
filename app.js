@@ -23,12 +23,12 @@ nunjucks.configure("views", {
     express : app,
     watch : true,
 });
-db.sequelize.sync({force : true})
+db.sequelize.sync({force : false})
     .then(() => {
-        console.log("데이터 베이스 연결 성공");
+        console.log("[ZEROFIT] Database & tables created!");
     })
     .catch((error) => {
-        console.log(error);
+        console.log("[ZEROFIT] Error creating database tables:",error);
     })
 
 app.use(morgan("dev"));
@@ -53,7 +53,7 @@ app.use(session({
 app.use("/", main_router);
 
 app.use((req, res, next) => {
-    const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+    const error = new Error(`Not existed ${req.method} ${req.url} routes.`);
     error.status = 404;
     next(error);
 })

@@ -9,14 +9,14 @@
     "test" : {
         "username" : "root",
         "password" : "zerofit00",
-        "database" : "zerofit_test",
+        "database" : "zerofit_-test",
         "host" : "127.0.0.1",
         "dialect" : "mysql"
     },
     "production" : {
         "username" : "root",
         "password" : "zerofit00",
-        "database" : "zerofit_production",
+        "database" : "zerofit_prod",
         "host" : "127.0.0.1",
         "dialect" : "mysql"
     }
