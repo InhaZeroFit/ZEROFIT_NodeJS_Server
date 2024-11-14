@@ -6,33 +6,38 @@ const morgan = require("morgan");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const nunjucks = require("nunjucks");
+const cors = require("cors");
+
 
 dotenv.config();
-// const user_router = require("./routes/route_user");
-// const clothes_router = require("./routes/route_clothes");
-// const market_router = require("./routes/route_market");
-// const wardrobe_router = require("./routes/route_wardrobe");
-const main_router = require("./routes/route_main");
+
+const main_router = require("./routes/main");
 const db = require("./models");
 
 const app = express();
 const PORT = 8005;
-app.set("port", process.env.PORT || PORT);
+
+app.set("port", PORT || process.env.PORT);
 app.set("view engine", "html");
 nunjucks.configure("views", {
     express : app,
     watch : true,
 });
+
 db.sequelize.sync({force : false})
     .then(() => {
-        console.log("[ZEROFIT] Database & tables created!");
+        console.log("[ZEROFIT] Database & tables setted!");
     })
     .catch((error) => {
         console.log("[ZEROFIT] Error creating database tables:",error);
     })
 
+// Middlewares
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(cors()); // Allow another ports.
+
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 app.use(cookie_parser(process.env.COOKIE_SECRET));
@@ -46,10 +51,7 @@ app.use(session({
     }
 }));
 
-// app.use("/user", user_router);
-// app.use("/clothes", clothes_router);
-// app.use("/market", market_router);
-// app.use("/wardrobe", wardrobe_router);
+// Routes
 app.use("/", main_router);
 
 app.use((req, res, next) => {

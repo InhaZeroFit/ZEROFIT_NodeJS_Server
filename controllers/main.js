@@ -1,7 +1,7 @@
 exports.home = async(req, res, next) => {
     try {
-        res.render("home", {
-            title : "zerofit-home"
+        res.render("main", {
+            title : "ZEROFIT - MAIN"
         });
     } catch(error) {
         console.log(error);
