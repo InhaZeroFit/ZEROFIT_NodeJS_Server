@@ -8,6 +8,7 @@ const session = require("express-session");
 const cors = require("cors");
 const passport = require("passport");
 const passportConfig=require('./passport');
+const rateLimit = require("express-rate-limit");
 
 dotenv.config();
 
@@ -36,6 +37,14 @@ db.sequelize.sync({force : false})
     .catch((error) => {
         console.log("[ZEROFIT] Error creating database tables:",error);
     })
+// Rate Limiting
+const globalLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1분
+    max: 10, // 1분에 최대 10회 요청
+    message: "Too many requests, please try again later.",
+});
+
+app.use(globalLimiter);
 
 // Middlewares
 app.use(morgan("dev"));
