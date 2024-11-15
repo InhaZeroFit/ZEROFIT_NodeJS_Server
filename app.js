@@ -6,6 +6,8 @@ const morgan = require("morgan");
 const cookie_parser = require("cookie-parser");
 const session = require("express-session");
 const cors = require("cors");
+const passport = require("passport");
+const passportConfig=require('./passport');
 
 dotenv.config();
 
@@ -15,6 +17,8 @@ const db = require("./models");
 
 const app = express();
 const PORT = 8005;
+
+passportConfig(); // Setting passport
 
 // Server setting
 app.set("port", PORT || process.env.PORT);
@@ -49,6 +53,8 @@ app.use(session({
     }
 }));
 app.use(cors()); // Allow another ports.
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 app.use("/", main_router);

@@ -1,8 +1,9 @@
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 const db = require("../models");
 const User = db.User;
 
-exports.join = async(req, res, next) => {
+exports.join = async (req, res, next) => {
     const { email, nick, password, phone_number, name, gender, address, payment } = req.body;
     try {
         // Validate input datas.
@@ -47,3 +48,49 @@ exports.join = async(req, res, next) => {
         return res.status(500).json({ message : "Internal server error", error : error.message});
     }
 };
+
+exports.login = async (req, res, next) => {
+    passport.authenticate("local", (authError, user, info) => {
+        if (authError) {
+            console.error(authError);
+            return res.status(500).json({ message : "Internal server error" });
+        }
+        
+        if (!user) {
+            return res.status(401).json({ message : info.message }); // 인증 실패 시
+        }
+
+        return req.login(user, (loginError) => {
+            if (loginError) {
+                console.error(loginError);
+                return res.status(500).json({ message : "Failed to log in" });
+            }
+            console.log("로그인 성공");
+            // 로그인 성공 시 JSON 응답
+            return res.status(200).json({
+                message : "Login successful",
+                user : {
+                    id : user.user_id,
+                    email : user.email,
+                    nick : user.nick,
+                },
+            });
+        });
+    })(req, res, next);
+};
+
+exports.logout = (req, res) => {
+    req.logout((error) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).json({ message : "Failed to log out" });
+        }
+        req.session.destory((error) => {
+            if (error) {
+                console.error(error);
+                return res.status(500).json({ message : "Failed to destory session" });
+            }
+            return res.status(200).json({ message : "Logout successful" });
+        })
+    })
+}
