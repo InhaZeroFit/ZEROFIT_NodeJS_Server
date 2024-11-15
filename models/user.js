@@ -19,11 +19,11 @@ class User extends Sequelize.Model {
                 },
             },
             password : {
-                type : Sequelize.STRING(40),
+                type : Sequelize.STRING(255),
                 allowNull : false,
             },
             phone_number : {
-                type : Sequelize.INTEGER,
+                type : Sequelize.STRING(20),
                 allowNull : false,
             },
             name : {

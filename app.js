@@ -10,6 +10,7 @@ const cors = require("cors");
 dotenv.config();
 
 const main_router = require("./routes/main");
+const auth_router = require("./routes/auth");
 const db = require("./models");
 
 const app = express();
@@ -51,6 +52,7 @@ app.use(cors()); // Allow another ports.
 
 // Routes
 app.use("/", main_router);
+app.use("/auth", auth_router);
 
 // Middlewares for error handing
 app.use((req, res, next) => {
