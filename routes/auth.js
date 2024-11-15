@@ -1,8 +1,11 @@
 const express = require("express");
-const { join } = require("../controllers/auth");
+const { join, login } = require("../controllers/auth");
 const router = express.Router();
 
 // POST /auth/join
-router.post('/join', join);
+router.post("/join", join);
+
+// POST /auth/login
+router.post("/login", login);
 
 module.exports = router;

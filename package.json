@@ -1,7 +1,7 @@
 {
   "name": "zerofit_be",
   "version": "1.0.0",
-  "description": "zerofit_backend_server",
+  "description": "zerofit_nodejs_server",
   "main": "server.js",
   "scripts": {
     "start": "nodemon"
@@ -27,6 +27,8 @@
     "mysql2": "^3.11.4",
     "nodemon": "^3.1.7",
     "nunjucks": "^3.2.4",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2"
   },
