@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" # 패키지 매니저 (npm, pip, maven 등)
+    directory: "/"           # 패키지가 있는 디렉토리
+    schedule:
+      interval: "weekly"     # 업데이트 주기 (daily, weekly, monthly 가능)
+    commit-message:
+      prefix: "deps"         # 커밋 메시지의 접두사
+    open-pull-requests-limit: 10
+    rebase-strategy: "auto"
