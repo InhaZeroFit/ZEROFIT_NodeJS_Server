@@ -1,7 +1,12 @@
 FROM node:latest
 
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
 COPY ./ ./
 
-RUN npm install
+EXPOSE 10101
 
 CMD ["node", "server.js"]
