@@ -5,15 +5,16 @@ const path = require("path")
 const morgan = require("morgan");
 const cookie_parser = require("cookie-parser");
 const session = require("express-session");
-const cors = require("cors");
 const passport = require("passport");
 const passportConfig=require('./passport');
 const rateLimit = require("express-rate-limit");
 const logger = require("./logs/logger");
 const hpp = require("hpp");
-
 // Load environment variables
 dotenv.config();
+
+const redis_client = require("./config/redis");
+const RedisSessionStore = require("connect-redis").default;
 
 const main_router = require("./routes/main");
 const auth_router = require("./routes/auth");
@@ -39,13 +40,13 @@ db.sequelize.sync({force : false})
     .catch((error) => {
         console.log("[ZEROFIT] Error creating database tables:",error);
     })
+
 // Rate Limiting
 const globalLimiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1분
     max: 10, // 1분에 최대 10회 요청
     message: "Too many requests, please try again later.",
 });
-
 app.use(globalLimiter);
 
 // Middlewares
@@ -66,11 +67,14 @@ const session_options = {
     cookie : {
         httpOnly : true, // Protected from XSS if setted true
         secure : false, // Sent only if the cookie is an HTTPS request if setted true.
-        sameSite : "strict" // There are options of strict, lax, none.
-    }
+        sameSite : "strict", // There are options of strict, lax, none.
+        maxAge: 1000 * 60 * 60, // 1 hours
+    },
+    store : new RedisSessionStore({ client : redis_client }),
 }
 app.use(session(session_options));
-app.use(cors()); // Allow another ports.
+
+// Initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
 
