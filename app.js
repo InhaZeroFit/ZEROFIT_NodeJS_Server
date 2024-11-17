@@ -10,6 +10,7 @@ const passport = require("passport");
 const passportConfig=require('./passport');
 const rateLimit = require("express-rate-limit");
 const logger = require("./logs/logger");
+const hpp = require("hpp");
 
 // Load environment variables
 dotenv.config();
@@ -50,6 +51,7 @@ app.use(globalLimiter);
 // Middlewares
 if (process.env.NODE_ENV == "production") {
     app.use(morgan("combined"));
+    app.use(hpp()); // HTTP parameter contamination prevention
 } else {
     app.use(morgan("dev"));
 }
