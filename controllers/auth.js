@@ -35,14 +35,16 @@ exports.join = async (req, res, next) => {
         });
 
         // Return successful response.
-        return res.status(201).json({
-            message : "User created successfully",
-            user : {
-                id : new_user.user_id,
-                email : new_user.email,
-                nick : new_user.nick,
-            },
-        });
+        return res.status(201).json(
+            {
+                message : "User created successfully",
+                user : {
+                    id : new_user.user_id,
+                    email : new_user.email,
+                    nick : new_user.nick,
+                },
+            }
+    );
     } catch(error) {
         console.error(error);
         return res.status(500).json({ message : "Internal server error", error : error.message});

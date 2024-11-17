@@ -3,3 +3,9 @@ node_modules/
 
 # 환경 변수 파일
 .env
+
+# log 기록
+logs/history
+
+# MacOS
+.DS_Store

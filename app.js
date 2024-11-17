@@ -9,7 +9,9 @@ const cors = require("cors");
 const passport = require("passport");
 const passportConfig=require('./passport');
 const rateLimit = require("express-rate-limit");
+const logger = require("./logs/logger");
 
+// Load environment variables
 dotenv.config();
 
 const main_router = require("./routes/main");
@@ -17,12 +19,11 @@ const auth_router = require("./routes/auth");
 const db = require("./models");
 
 const app = express();
-const PORT = 8005;
 
 passportConfig(); // Setting passport
 
 // Server setting
-app.set("port", PORT || process.env.PORT);
+app.set("port",process.env.PORT || process.env.NODE_PORT);
 app.set("view engine", "html");
 nunjucks.configure("views", {
     express : app,
@@ -32,7 +33,7 @@ nunjucks.configure("views", {
 // Database setting
 db.sequelize.sync({force : false})
     .then(() => {
-        console.log("[ZEROFIT] Database & tables setted!");
+        console.log("[ZEROFIT] Database & tables connected!");
     })
     .catch((error) => {
         console.log("[ZEROFIT] Error creating database tables:",error);
@@ -47,20 +48,26 @@ const globalLimiter = rateLimit({
 app.use(globalLimiter);
 
 // Middlewares
-app.use(morgan("dev"));
+if (process.env.NODE_ENV == "production") {
+    app.use(morgan("combined"));
+} else {
+    app.use(morgan("dev"));
+}
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json());
+app.use(cookie_parser(process.env.COOKIE_SECRET)); // Set up cookie parser (to store CSRF tokens in cookies)
+app.use(express.json()); // JSON and URL encoded request body parsing
 app.use(express.urlencoded({extended:false}))
-app.use(cookie_parser(process.env.COOKIE_SECRET));
-app.use(session({
+const session_options = {
     resave : false,
     saveUninitialized : false,
     secret : process.env.COOKIE_SECRET,
     cookie : {
-        httpOnly : true,
-        secure : false,
+        httpOnly : true, // Protected from XSS if setted true
+        secure : false, // Sent only if the cookie is an HTTPS request if setted true.
+        sameSite : "strict" // There are options of strict, lax, none.
     }
-}));
+}
+app.use(session(session_options));
 app.use(cors()); // Allow another ports.
 app.use(passport.initialize());
 app.use(passport.session());
@@ -73,6 +80,8 @@ app.use("/auth", auth_router);
 app.use((req, res, next) => {
     const error = new Error(`Not existed ${req.method} ${req.url} routes.`);
     error.status = 404;
+    logger.info(`404 Error: ${req.method} ${req.url} route not found`);
+    logger.error(error.message);
     next(error);
 });
 

@@ -36,7 +36,7 @@ class User extends Sequelize.Model {
                 defaultValue : "Other",
             },
             nick : {
-                type : Sequelize.STRING(10),
+                type : Sequelize.STRING(20),
                 allowNull : true,
                 defaultValue : "noname",
             },
