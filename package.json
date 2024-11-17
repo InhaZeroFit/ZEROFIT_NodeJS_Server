@@ -4,7 +4,7 @@
   "description": "zerofit_nodejs_server",
   "main": "server.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production PORT=10103 node server",
+    "start": "cross-env NODE_ENV=production PORT=10103 pm2 start server.js",
     "dev": "nodemon server"
   },
   "repository": {
@@ -32,6 +32,7 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "pm2": "^5.4.3",
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2",
     "winston": "^3.17.0"
