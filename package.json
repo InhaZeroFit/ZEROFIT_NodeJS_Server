@@ -1,5 +1,5 @@
 {
-  "name": "zerofit_be",
+  "name": "zerofit_nodejs_server",
   "version": "1.0.0",
   "description": "zerofit_nodejs_server",
   "main": "server.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/InhaZeroFit/ZEROFIT_BE.git"
+    "url": "https://github.com/InhaZeroFit/ZEROFIT_NodeJS_Server.git"
   },
   "author": "KimJunHo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/InhaZeroFit/ZEROFIT_BE/issues"
+    "url": "https://github.com/InhaZeroFit/ZEROFIT_NodeJS_Server/issue"
   },
-  "homepage": "https://github.com/InhaZeroFit/ZEROFIT_BE#readme",
+  "homepage": "https://github.com/InhaZeroFit/ZEROFIT_NodeJS_Server#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "connect-redis": "^7.1.1",

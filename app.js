@@ -10,8 +10,8 @@ const passportConfig=require('./passport');
 const rateLimit = require("express-rate-limit");
 const logger = require("./logs/logger");
 const hpp = require("hpp");
-// Load environment variables
-dotenv.config();
+
+dotenv.config(); // Load environment variables
 
 const redis_client = require("./config/redis");
 const RedisSessionStore = require("connect-redis").default;
@@ -35,10 +35,10 @@ nunjucks.configure("views", {
 // Database setting
 db.sequelize.sync({force : false})
     .then(() => {
-        console.log("[ZEROFIT] Database & tables connected!");
+        console.log("[MySQL] Database & tables connected!");
     })
     .catch((error) => {
-        console.log("[ZEROFIT] Error creating database tables:",error);
+        console.log("[MySQL] Error creating database tables:",error);
     })
 
 // Rate Limiting
