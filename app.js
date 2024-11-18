@@ -10,6 +10,7 @@ const passportConfig=require('./passport');
 const rateLimit = require("express-rate-limit");
 const logger = require("./logs/logger");
 const hpp = require("hpp");
+const cors = require("cors");
 
 dotenv.config(); // Load environment variables
 
@@ -24,6 +25,7 @@ const app = express();
 
 passportConfig(); // Setting passport
 
+app.use(cors());
 // Server setting
 app.set("port",process.env.PORT || process.env.NODE_PORT);
 app.set("view engine", "html");
