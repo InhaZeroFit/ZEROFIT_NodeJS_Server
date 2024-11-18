@@ -7,13 +7,13 @@ const morgan = require("morgan");
 const cookie_parser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
-const rateLimit = require("express-rate-limit");
+const ratelimit = require("express-rate-limit");
 const logger = require("./logs/logger");
 const hpp = require("hpp");
 const cors = require("cors");
 
 // 커스텀 모듈
-const passportConfig = require("./passport");
+const passport_config = require("./passport");
 const redis_client = require("./config/redis");
 const RedisSessionStore = require("connect-redis").default;
 const main_router = require("./routes/main");
@@ -25,7 +25,7 @@ dotenv.config(); // Load environment variables
 
 // 3. 애플리케이션 초기화
 const app = express();
-app.set("port", process.env.PORT || process.env.NODE_PORT);
+app.set("port", process.env.PORT);
 app.set("view engine", "html");
 nunjucks.configure("views", {
     express: app,
@@ -33,12 +33,12 @@ nunjucks.configure("views", {
 });
 
 // 4. 보안 및 성능 관련 설정 (Rate Limit, CORS)
-const globalLimiter = rateLimit({
+const global_limiter = ratelimit({
     windowMs: 1 * 60 * 1000, // 1분
     max: 10, // 1분에 최대 10회 요청
     message: "Too many requests, please try again later.",
 });
-app.use(globalLimiter);
+app.use(global_limiter);
 app.use(cors());
 
 // 5. 미들웨어 설정
@@ -69,7 +69,7 @@ const session_options = {
 app.use(session(session_options));
 
 // 6. Passport 초기화
-passportConfig(); // Passport 설정
+passport_config(); // Passport 설정
 app.use(passport.initialize());
 app.use(passport.session());
 

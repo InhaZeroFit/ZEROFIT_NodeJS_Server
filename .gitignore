@@ -9,6 +9,3 @@ logs/history
 
 # MacOS
 .DS_Store
-
-# Docker
-.dockerignore

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production PORT=10103 pm2 start server.js",
-    "dev": "nodemon server"
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
