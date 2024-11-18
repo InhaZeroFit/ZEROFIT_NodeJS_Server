@@ -1,90 +1,92 @@
-const express=require("express");
+// 1. 모듈 임포트
+const express = require("express");
 const dotenv = require("dotenv");
 const nunjucks = require("nunjucks");
-const path = require("path")
+const path = require("path");
 const morgan = require("morgan");
 const cookie_parser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
-const passportConfig=require('./passport');
 const rateLimit = require("express-rate-limit");
 const logger = require("./logs/logger");
 const hpp = require("hpp");
 const cors = require("cors");
 
-dotenv.config(); // Load environment variables
-
+// 커스텀 모듈
+const passportConfig = require("./passport");
 const redis_client = require("./config/redis");
 const RedisSessionStore = require("connect-redis").default;
-
 const main_router = require("./routes/main");
 const auth_router = require("./routes/auth");
 const db = require("./models");
 
+// 2. 환경 설정
+dotenv.config(); // Load environment variables
+
+// 3. 애플리케이션 초기화
 const app = express();
-
-passportConfig(); // Setting passport
-
-app.use(cors());
-// Server setting
-app.set("port",process.env.PORT || process.env.NODE_PORT);
+app.set("port", process.env.PORT || process.env.NODE_PORT);
 app.set("view engine", "html");
 nunjucks.configure("views", {
-    express : app,
-    watch : true,
+    express: app,
+    watch: true,
 });
 
-// Database setting
-db.sequelize.sync({force : false})
-    .then(() => {
-        console.log("[MySQL] Database & tables connected!");
-    })
-    .catch((error) => {
-        console.log("[MySQL] Error creating database tables:",error);
-    })
-
-// Rate Limiting
+// 4. 보안 및 성능 관련 설정 (Rate Limit, CORS)
 const globalLimiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1분
     max: 10, // 1분에 최대 10회 요청
     message: "Too many requests, please try again later.",
 });
 app.use(globalLimiter);
+app.use(cors());
 
-// Middlewares
+// 5. 미들웨어 설정
 if (process.env.NODE_ENV == "production") {
-    app.use(morgan("combined"));
-    app.use(hpp()); // HTTP parameter contamination prevention
+    app.use(morgan("combined")); // Production logging
+    app.use(hpp()); // Prevent HTTP parameter pollution
 } else {
-    app.use(morgan("dev"));
+    app.use(morgan("dev")); // Development logging
 }
-app.use(express.static(path.join(__dirname, "public")));
-app.use(cookie_parser(process.env.COOKIE_SECRET)); // Set up cookie parser (to store CSRF tokens in cookies)
-app.use(express.json()); // JSON and URL encoded request body parsing
-app.use(express.urlencoded({extended:false}))
+app.use(express.static(path.join(__dirname, "public"))); // Static file serving
+app.use(cookie_parser(process.env.COOKIE_SECRET)); // Cookie parser with secret
+app.use(express.json()); // JSON body parsing
+app.use(express.urlencoded({ extended: false })); // URL-encoded body parsing
+
+// 세션 설정
 const session_options = {
-    resave : false,
-    saveUninitialized : false,
-    secret : process.env.COOKIE_SECRET,
-    cookie : {
-        httpOnly : true, // Protected from XSS if setted true
-        secure : false, // Sent only if the cookie is an HTTPS request if setted true.
-        sameSite : "strict", // There are options of strict, lax, none.
-        maxAge: 1000 * 60 * 60, // 1 hours
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true, // XSS 보호
+        secure: false, // HTTPS 요청만 허용
+        sameSite: "strict", // CSRF 보호
+        maxAge: 1000 * 60 * 60, // 1시간
     },
-    store : new RedisSessionStore({ client : redis_client }),
-}
+    store: new RedisSessionStore({ client: redis_client }),
+};
 app.use(session(session_options));
 
-// Initialize passport
+// 6. Passport 초기화
+passportConfig(); // Passport 설정
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes
+// 7. 데이터베이스 초기화
+db.sequelize.sync({ force: false })
+    .then(() => {
+        console.log("[MySQL] Database & tables connected!");
+    })
+    .catch((error) => {
+        console.log("[MySQL] Error creating database tables:", error);
+    });
+
+// 8. 라우터 설정
 app.use("/", main_router);
 app.use("/auth", auth_router);
 
-// Middlewares for error handing
+// 9. 에러 핸들링 미들웨어
 app.use((req, res, next) => {
     const error = new Error(`Not existed ${req.method} ${req.url} routes.`);
     error.status = 404;
@@ -93,11 +95,12 @@ app.use((req, res, next) => {
     next(error);
 });
 
-app.use((err,req,res,next) => {
-    res.locals.message=err.message
-    res.locals.error=process.env.NODE_ENV !== 'production' ? err : {} // If NODE_ENV isn't production then, print err
-    res.status(err.status || 500)
-    res.render('error')
+app.use((err, req, res, next) => {
+    res.locals.message = err.message;
+    res.locals.error = process.env.NODE_ENV !== "production" ? err : {}; // 상세 에러는 개발 환경에서만
+    res.status(err.status || 500);
+    res.render("error");
 });
 
+// 10. 모듈 내보내기
 module.exports = app;
