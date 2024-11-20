@@ -8,9 +8,30 @@ const Photo = require("./photo");
 const Market = require("./market");
 
 const db = {};
+
 const sequelize = new Sequelize(
-    config.database, config.username, config.password, config
-)
+    config.database,
+    config.username,
+    config.password,
+    {
+        host: config.host,
+        dialect: config.dialect,
+        port: config.port,
+        pool: config.pool,
+        logging: config.logging,
+        dialectOptions: config.dialectOptions,
+    }
+);
+    
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((error) => {
+    console.error("Unable to connect to the database: ", error);
+  });
+
 
 db.sequelize = sequelize;
 db.User = User;
