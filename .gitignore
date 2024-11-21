@@ -9,3 +9,9 @@ logs/history
 
 # MacOS
 .DS_Store
+
+# image 폴더
+sam/results/
+
+# public 폴더
+public/
