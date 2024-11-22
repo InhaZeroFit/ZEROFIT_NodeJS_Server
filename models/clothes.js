@@ -10,24 +10,43 @@ class Clothes extends Sequelize.Model {
                 primaryKey : true,
                 autoIncrement : true,
             },
-            clothes_type : {
-                type : Sequelize.DataTypes.ENUM("Top", "Bottom", "Other"),
+            name : {
+                type : Sequelize.STRING(30),
                 allowNull : false,
-                defaultValue : "Other",
+                defaultValue : "NoName",
+            },
+            clothes_type : {
+                type : Sequelize.DataTypes.ENUM("Top", "Bottom", "Coat", "Dress", "Accessory"),
+                allowNull : false,
+                defaultValue : "OtherType",
+            },
+            score : {
+                type : Sequelize.ENUM("1", "2", "3", "4", "5"),
+                allowNull : false,
+                defaultValue : "NoScore",
             },
             size : {
                 type : Sequelize.DataTypes.ENUM("90", "95", "100", "105", "110", "Other"),
                 allowNull : false,
-                defaultValue : "Other",
+                defaultValue : "OtherSize",
+            },
+            brand : {
+                type : Sequelize.DataTypes.ENUM("Casual", "Vintage", "Formal", "Minimal"),
+                allowNull : false,
+                defaultValue : "OtherBrand",
+            },
+            memo : {
+                type : Sequelize.STRING(100),
+                allowNull : true,
             },
             color : {
                 type : Sequelize.STRING(10),
                 allowNull : true,
             },
-            brand : {
-                type : Sequelize.STRING(20),
+            date_purchase : {
+                type : Sequelize.STRING(10),
                 allowNull : true,
-            },
+            }
         }, {
             sequelize,
             timestamps : true,

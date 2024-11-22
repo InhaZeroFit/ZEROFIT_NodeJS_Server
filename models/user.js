@@ -10,8 +10,12 @@ class User extends Sequelize.Model {
                 primaryKey : true,
                 autoIncrement : true,
             },
+            name : {
+                type : Sequelize.STRING(20),
+                allowNull : false,
+            },
             email : {
-                type : Sequelize.STRING(40),
+                type : Sequelize.STRING(50),
                 allowNull : false, 
                 unique : true,
                 validate : {
@@ -22,11 +26,11 @@ class User extends Sequelize.Model {
                 type : Sequelize.STRING(255),
                 allowNull : false,
             },
-            phone_number : {
-                type : Sequelize.STRING(20),
+            address : {
+                type : Sequelize.STRING(40),
                 allowNull : false,
             },
-            name : {
+            phone_number : {
                 type : Sequelize.STRING(20),
                 allowNull : false,
             },
@@ -43,11 +47,7 @@ class User extends Sequelize.Model {
             profile_photo : {
                 type : Sequelize.STRING(100),
                 allowNull : true,
-                defaultValue : "/public/default_image.png",
-            },
-            address : {
-                type : Sequelize.STRING(40),
-                allowNull : true,
+                defaultValue : "/public/default_images/default_image.png",
             },
             payment : {
                 type : Sequelize.STRING(20),

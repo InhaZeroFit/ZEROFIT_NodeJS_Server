@@ -8,7 +8,7 @@ dotenv.config();
 const flask_url = `http://${process.env.FLASK_HOST}:${process.env.FLASK_PORT}/preprocess`;
 
 // 이미지 파일 경로
-const image_path = path.join(__dirname, '../public/a.jpeg');
+const image_path = path.join(__dirname, '../public/uploads/clothes/a.jpeg');
 
 // 저장 디렉토리 설정
 const save_dir = path.join(__dirname, '../sam/results');
