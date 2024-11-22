@@ -1,7 +1,7 @@
 ---
-name: FEAT |
+name: Feature request
 about: 이 템플릿은 새로운 기능 요청을 위한 템플릿입니다.
-title: 'Feature Request: [기능 이름 또는 요약 설명]'
+title: '[FEAT] [기능 이름 또는 요약 설명]'
 labels: ''
 assignees: ''
 
