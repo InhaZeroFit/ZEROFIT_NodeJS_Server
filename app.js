@@ -78,10 +78,19 @@ app.use(passport.session());
 // 7. 데이터베이스 초기화
 db.sequelize.sync({ force: false })
     .then(() => {
-        console.log("[MySQL] Database & tables connected!");
+        if (process.env.NODE_ENV == "production") {
+            console.log(`[MySQL at ${process.env.SEQUELIZE_HOST}] Database & tables connected!`);
+        } else if (process.env.NODE_ENV == "development") {
+            console.log(`[MySQL at ${process.env.SEQUELIZE_DEV_HOST}] Database & tables connected!`);
+        }
     })
     .catch((error) => {
-        console.log("[MySQL] Error creating database tables:", error);
+        if (process.env.NODE_ENV == "production") {
+            console.log(`[MySQL at ${process.env.SEQUELIZE_HOST}] Error creating database tables:`, error);
+        } else if (process.env.NODE_ENV == "development") {
+            console.log(`[MySQL at ${process.env.SEQUELIZE_DEV_HOST}] Error creating database tables:`, error);
+
+        }
     });
 
 // 8. 라우터 설정

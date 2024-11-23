@@ -9,6 +9,12 @@
 <body>
     <h1>This is ZEROFIT Server.</h1>
     <h2>Welcome to our server!</h2>
+    
+    {% if notice %}
+        <h3>{{ notice }}</h3>
+    {% endif %}
+
+    
     <img src="/default_images/default_image.png" alt="Default Image" style="width:300px;height:auto;">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>

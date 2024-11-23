@@ -4,8 +4,8 @@
   "description": "zerofit_nodejs_server",
   "main": "server.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production PORT=10103 pm2 start server.js",
-    "dev": "nodemon server.js"
+    "prod": "cross-env NODE_ENV=production PORT=10103 pm2 start server.js",
+    "dev": "cross-env NODE_ENV=development PORT=10103 nodemon server.js"
   },
   "repository": {
     "type": "git",
