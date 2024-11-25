@@ -10,33 +10,32 @@ class Clothes extends Sequelize.Model {
                 primaryKey : true,
                 autoIncrement : true,
             },
+            image_url : {
+                type : Sequelize.STRING(100),
+                allowNull : false,
+            },
             name : {
                 type : Sequelize.STRING(30),
                 allowNull : false,
-                defaultValue : "NoName",
             },
             clothes_type : {
-                type : Sequelize.DataTypes.ENUM("Top", "Bottom", "Coat", "Dress", "Accessory", "OtherType"),
+                type : Sequelize.DataTypes.ENUM("상의", "하의", "외투", "원피스", "액세서리"),
                 allowNull : false,
-                defaultValue : "OtherType",
             },
             score : {
-                type : Sequelize.ENUM("1", "2", "3", "4", "5", "NoScore"),
+                type : Sequelize.ENUM("1", "2", "3", "4", "5"),
                 allowNull : false,
-                defaultValue : "NoScore",
             },
-            size : {
-                type : Sequelize.DataTypes.ENUM("90", "95", "100", "105", "110", "Other", "OtherSize"),
+            style : {
+                type : Sequelize.DataTypes.ENUM("캐주얼", "빈티지", "포멀", "미니멀"),
                 allowNull : false,
-                defaultValue : "OtherSize",
-            },
-            brand : {
-                type : Sequelize.DataTypes.ENUM("Casual", "Vintage", "Formal", "Minimal", "OtherBrand"),
-                allowNull : false,
-                defaultValue : "OtherBrand",
             },
             memo : {
                 type : Sequelize.STRING(100),
+                allowNull : true,
+            },
+            size : {
+                type : Sequelize.DataTypes.ENUM("90", "95", "100", "105", "110", "Other"),
                 allowNull : true,
             },
             color : {
@@ -66,10 +65,6 @@ class Clothes extends Sequelize.Model {
         db.Clothes.belongsTo(db.Wardrobe, {
             foreignKey : "wardrobe_id",
             targetKey : "wardrobe_id",
-        });
-        db.Clothes.hasMany(db.Photo, {
-            foreignKey : "clothes_id",
-            sourceKey : "clothes_id",
         });
         db.Clothes.hasMany(db.Market, {
             foreignKey : "clothes_id",

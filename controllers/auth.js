@@ -1,5 +1,9 @@
 const bcrypt = require("bcrypt");
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
+
 const db = require("../models");
 const User = db.User;
 
@@ -68,14 +72,20 @@ exports.login = async (req, res, next) => {
                 return res.status(500).json({ message : "Failed to log in" });
             }
             console.log("로그인 성공");
+
+            // JWT 토근 생성
+            const token = jwt.sign(
+                {
+                    'user_id' : user.user_id
+                },
+                process.env.JWT_SECRET,
+                { expiresIn : process.env.JWT_EXPIRES_IN }
+            );
+            
             // 로그인 성공 시 JSON 응답
             return res.status(200).json({
+                'token' : token,
                 message : "Login successful",
-                user : {
-                    id : user.user_id,
-                    email : user.email,
-                    nick : user.nick,
-                },
             });
         });
     })(req, res, next);
