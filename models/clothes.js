@@ -18,17 +18,31 @@ class Clothes extends Sequelize.Model {
                 type : Sequelize.STRING(30),
                 allowNull : false,
             },
-            clothes_type : {
-                type : Sequelize.DataTypes.ENUM("상의", "하의", "외투", "원피스", "액세서리"),
-                allowNull : false,
+            clothes_type: {
+                type: Sequelize.TEXT, // JSON 데이터를 저장하기 위해 TEXT로 변경
+                allowNull: false,
+                get() {
+                    const rawValue = this.getDataValue("clothes_type");
+                    return rawValue ? JSON.parse(rawValue) : [];
+                },
+                set(value) {
+                    this.setDataValue("clothes_type", JSON.stringify(value));
+                },
             },
             score : {
                 type : Sequelize.ENUM("1", "2", "3", "4", "5"),
                 allowNull : false,
             },
-            style : {
-                type : Sequelize.DataTypes.ENUM("캐주얼", "빈티지", "포멀", "미니멀"),
-                allowNull : false,
+            style: {
+                type: Sequelize.TEXT, // JSON 데이터를 저장하기 위해 TEXT로 변경
+                allowNull: false,
+                get() {
+                    const rawValue = this.getDataValue("style");
+                    return rawValue ? JSON.parse(rawValue) : [];
+                },
+                set(value) {
+                    this.setDataValue("style", JSON.stringify(value));
+                },
             },
             memo : {
                 type : Sequelize.STRING(100),
