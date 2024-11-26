@@ -18,7 +18,6 @@ const redis_client = require("./config/redis");
 const RedisSessionStore = require("connect-redis").default;
 const main_router = require("./routes/main");
 const auth_router = require("./routes/auth");
-const user_router = require("./routes/user");
 const clothes_router = require("./routes/clothes");
 const db = require("./models");
 
@@ -96,7 +95,6 @@ db.sequelize.sync({ force: false })
 // 8. 라우터 설정
 app.use("/", main_router);
 app.use("/auth", auth_router);
-app.use("/user", user_router);
 app.use("/clothes", clothes_router);
 
 // 9. 에러 핸들링 미들웨어

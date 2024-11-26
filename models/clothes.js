@@ -10,7 +10,7 @@ class Clothes extends Sequelize.Model {
                 primaryKey : true,
                 autoIncrement : true,
             },
-            image_url : {
+            image_name : {
                 type : Sequelize.STRING(100),
                 allowNull : false,
             },
