@@ -19,6 +19,7 @@ const RedisSessionStore = require("connect-redis").default;
 const main_router = require("./routes/main");
 const auth_router = require("./routes/auth");
 const user_router = require("./routes/user");
+const clothes_router = require("./routes/clothes");
 const db = require("./models");
 
 // 2. 환경 설정
@@ -51,8 +52,8 @@ if (process.env.NODE_ENV == "production") {
 }
 app.use(express.static(path.join(__dirname, "public"))); // Static file serving
 app.use(cookie_parser(process.env.COOKIE_SECRET)); // Cookie parser with secret
-app.use(express.json()); // JSON body parsing
-app.use(express.urlencoded({ extended: false })); // URL-encoded body parsing
+app.use(express.json({ limit : "10mb" })); // JSON body parsing, JSON 요청 크기 제한 증가
+app.use(express.urlencoded({ limit : "10mb", extended: false })); // URL-encoded body parsing, URL-encoded 요청 크기 제한 증가
 
 // 세션 설정
 const session_options = {
@@ -77,16 +78,26 @@ app.use(passport.session());
 // 7. 데이터베이스 초기화
 db.sequelize.sync({ force: false })
     .then(() => {
-        console.log("[MySQL] Database & tables connected!");
+        if (process.env.NODE_ENV == "production") {
+            console.log(`[MySQL at ${process.env.SEQUELIZE_HOST}] Database & tables connected!`);
+        } else if (process.env.NODE_ENV == "development") {
+            console.log(`[MySQL at ${process.env.SEQUELIZE_DEV_HOST}] Database & tables connected!`);
+        }
     })
     .catch((error) => {
-        console.log("[MySQL] Error creating database tables:", error);
+        if (process.env.NODE_ENV == "production") {
+            console.log(`[MySQL at ${process.env.SEQUELIZE_HOST}] Error creating database tables:`, error);
+        } else if (process.env.NODE_ENV == "development") {
+            console.log(`[MySQL at ${process.env.SEQUELIZE_DEV_HOST}] Error creating database tables:`, error);
+
+        }
     });
 
 // 8. 라우터 설정
 app.use("/", main_router);
 app.use("/auth", auth_router);
 app.use("/user", user_router);
+app.use("/clothes", clothes_router);
 
 // 9. 에러 핸들링 미들웨어
 app.use((req, res, next) => {

@@ -4,8 +4,8 @@
   "description": "zerofit_nodejs_server",
   "main": "server.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production PORT=10103 pm2 start server.js",
-    "dev": "nodemon server.js"
+    "prod": "cross-env NODE_ENV=production PORT=10103 pm2 start server.js",
+    "dev": "cross-env NODE_ENV=development PORT=10103 nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,6 @@
   "dependencies": {
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
-    "canvas": "^2.11.0",
     "connect-redis": "^7.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -31,7 +30,9 @@
     "express-session": "^1.18.1",
     "fs-extra": "^11.2.0",
     "hpp": "^0.2.3",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.4",
     "nodemon": "^3.1.7",
     "nunjucks": "^3.2.4",
