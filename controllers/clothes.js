@@ -28,7 +28,7 @@ exports.upload_image = async (req, res, next) => {
         const user_id = req.user.user_id; // JWT 디코드된 정보에서 id 사용
 
         // 요청에서 데이터 가져오기
-        const { base64Image, clothingName, clothingType, rating, clothingStyle, imageMemo } = req.body;
+        const { base64Image, clothingName, rating, clothingType, clothingStyle, imageMemo, includePoint, excludePoint } = req.body;
         
         // Base64 데이터 디코딩
         const base64_data = base64Image.replace(/^data:image\/\w+;base64,/, "");
@@ -48,11 +48,15 @@ exports.upload_image = async (req, res, next) => {
                 name : clothingName,
                 score : rating,
                 clothes_type : clothingType,
-                style : clothingStyle,
+                clothes_style : clothingStyle,
                 memo : imageMemo,
+                include_point : includePoint,
+                exclude_point : excludePoint,
                 user_id,
             },
         );
+        
+        // 이미지 전처리 요청
 
         res.status(200).json({
             message : "Image uploaded successfully!",

@@ -18,6 +18,10 @@ class Clothes extends Sequelize.Model {
                 type : Sequelize.STRING(30),
                 allowNull : false,
             },
+            score : {
+                type : Sequelize.ENUM("1", "2", "3", "4", "5"),
+                allowNull : false,
+            },
             clothes_type: {
                 type: Sequelize.TEXT, // JSON 데이터를 저장하기 위해 TEXT로 변경
                 allowNull: false,
@@ -29,24 +33,42 @@ class Clothes extends Sequelize.Model {
                     this.setDataValue("clothes_type", JSON.stringify(value));
                 },
             },
-            score : {
-                type : Sequelize.ENUM("1", "2", "3", "4", "5"),
-                allowNull : false,
-            },
-            style: {
+            clothes_style: {
                 type: Sequelize.TEXT, // JSON 데이터를 저장하기 위해 TEXT로 변경
                 allowNull: false,
                 get() {
-                    const rawValue = this.getDataValue("style");
+                    const rawValue = this.getDataValue("clothes_style");
                     return rawValue ? JSON.parse(rawValue) : [];
                 },
                 set(value) {
-                    this.setDataValue("style", JSON.stringify(value));
+                    this.setDataValue("clothes_style", JSON.stringify(value));
                 },
             },
             memo : {
                 type : Sequelize.STRING(100),
                 allowNull : true,
+            },
+            include_point: { // 새롭게 추가된 컬럼
+                type: Sequelize.TEXT,
+                allowNull: true,
+                get() {
+                    const rawValue = this.getDataValue("include_point");
+                    return rawValue ? JSON.parse(rawValue) : null;
+                },
+                set(value) {
+                    this.setDataValue("include_point", JSON.stringify(value));
+                },
+            },
+            exclude_point: { // 새롭게 추가된 컬럼
+                type: Sequelize.TEXT,
+                allowNull: true,
+                get() {
+                    const rawValue = this.getDataValue("exclude_point");
+                    return rawValue ? JSON.parse(rawValue) : null;
+                },
+                set(value) {
+                    this.setDataValue("exclude_point", JSON.stringify(value));
+                },
             },
             size : {
                 type : Sequelize.DataTypes.ENUM("90", "95", "100", "105", "110", "Other"),
