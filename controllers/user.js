@@ -32,10 +32,11 @@ exports.send_image_to_flask = async (base64Image, includePoint, excludePoint, ba
         // 디렉토리 생성
         CreateDirectories();
 
+        const input_point = [[includePoint['x'], includePoint['y']], [excludePoint['x'], excludePoint['y']]];
+
         const flask_request_data = {
             image: base64Image,
-            // includePoint,
-            // excludePoint,
+            input_point,
         };
 
         const response = await axios.post(flask_url, flask_request_data, {
