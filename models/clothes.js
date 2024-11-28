@@ -98,10 +98,6 @@ class Clothes extends Sequelize.Model {
             foreignKey : "user_id",
             targetKey : "user_id",
         });
-        db.Clothes.belongsTo(db.Wardrobe, {
-            foreignKey : "wardrobe_id",
-            targetKey : "wardrobe_id",
-        });
         db.Clothes.hasMany(db.Market, {
             foreignKey : "clothes_id",
             sourceKey : "clothes_id",

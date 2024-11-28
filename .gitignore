@@ -12,6 +12,7 @@ logs/history
 
 # image 폴더
 sam/results/
+viton/results/
 
 # public 폴더
 public/uploads/clothes/
