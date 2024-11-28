@@ -1,5 +1,5 @@
-const app = require("./app");
+const app = require('./app');
 
-app.listen(app.get("port"),()=> {
-    console.log('[ZEROFIF] Server is running at',app.get("port"), 'port!');
+app.listen(app.get('port'), () => {
+  console.log('[ZEROFIF] Server is running at', app.get('port'), 'port!');
 });

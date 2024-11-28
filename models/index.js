@@ -1,34 +1,29 @@
-const Sequelize = require("sequelize"); // import sequelize
-const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config")[env];
-const User = require("./user");
-const Clothes = require("./clothes");
-const Market = require("./market");
+const Sequelize = require('sequelize');  // import sequelize
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config')[env];
+const User = require('./user');
+const Clothes = require('./clothes');
+const Market = require('./market');
 
 const db = {};
 
-const sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    {
-        host: config.host,
-        dialect: config.dialect,
-        port: config.port,
-        pool: config.pool,
-        logging: config.logging,
-        dialectOptions: config.dialectOptions,
-    }
-);
-    
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Connection has been established successfully.");
-  })
-  .catch((error) => {
-    console.error("Unable to connect to the database: ", error);
-  });
+const sequelize =
+    new Sequelize(config.database, config.username, config.password, {
+      host: config.host,
+      dialect: config.dialect,
+      port: config.port,
+      pool: config.pool,
+      logging: config.logging,
+      dialectOptions: config.dialectOptions,
+    });
+
+sequelize.authenticate()
+    .then(() => {
+      console.log('Connection has been established successfully.');
+    })
+    .catch((error) => {
+      console.error('Unable to connect to the database: ', error);
+    });
 
 
 db.sequelize = sequelize;

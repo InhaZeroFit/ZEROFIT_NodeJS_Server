@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{title}}</title>
 </head>
+
 <body>
     <h1>This is ZEROFIT Server.</h1>
     <h2>Welcome to our server!</h2>
-    
+
     {% if notice %}
-        <h3>{{ notice }}</h3>
+    <h3>{{ notice }}</h3>
     {% endif %}
 
-    
+
     <img src="/default_image.png" alt="Default Image" style="width:300px;height:auto;">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
+
 </html>
