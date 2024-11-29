@@ -6,10 +6,13 @@ const {send_preprocess_image_request, send_virtual_fitting} =
 
 function ImageToBase64(imagePath) {
   try {
-    const imageBuffer = fs.readFileSync(imagePath);      // 파일 읽기
-    return Buffer.from(imageBuffer).toString('base64');  // Base64 인코딩
+    if (!fs.existsSync(imagePath)) {
+      throw new Error(`File not found: ${imagePath}`);
+    }
+    const imageBuffer = fs.readFileSync(imagePath);
+    return Buffer.from(imageBuffer).toString('base64');
   } catch (error) {
-    console.error(`Error reading file at ${imagePath}:`, error.message);
+    console.error(`Error processing file at ${imagePath}:`, error.message);
     throw error;
   }
 }
@@ -40,38 +43,51 @@ exports.upload_image = async (req, res, next) => {
       });
     }
 
-    // 파일 이름과 경로 생성
+    const input_point = [
+      [includePoint['x'], includePoint['y']],
+      [excludePoint['x'], excludePoint['y']]
+    ];
+
+    // 이미지 이름 설정
     const base_name = `${Date.now()}-${user_id}`;
 
     // Flask 서버로 이미지 전송
     console.log('Sending image to Flask for preprocessing...');
-    const flask_response = await send_preprocess_image_request(
-        base64Image, includePoint, excludePoint, base_name);
+    const response = await send_preprocess_image_request(
+        base64Image, input_point, base_name);
 
-    if (!flask_response) {
+    if (!response) {
       throw new Error('Flask preprocessing failed.');
     }
 
     console.log('Flask preprocessing successful. Saving to DB...');
 
     // Flask 전처리가 성공하면 Clothes 테이블에 데이터 저장
-    const saved_clothes = await Clothes.create({
-      image_name: `${base_name}`,
-      name: clothingName,
-      score: rating,
-      clothes_type: clothingType,
-      clothes_style: clothingStyle,
-      memo: imageMemo,
-      include_point: includePoint,
-      exclude_point: excludePoint,
-      user_id,
-    });
+    try {
+      const saved_clothes = await Clothes.create({
+        image_name: `${base_name}`,
+        name: clothingName,
+        score: rating,
+        clothes_type: clothingType,
+        clothes_style: clothingStyle,
+        memo: imageMemo,
+        include_point: includePoint,
+        exclude_point: excludePoint,
+        user_id,
+      });
+      console.log('MySQL successfully saved clothes.');
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError') {
+        return res.status(400).json(
+            {error: 'Invalid data', details: error.errors});
+      }
+      throw error;
+    }
 
     // Flutter로 결과 전송
     return res.status(200).json({
       message: 'Image uploaded and processed successfully!',
-      flask_response,
-      saved_clothes,
+      response,
     });
   } catch (error) {
     console.error('[UPLOAD ERROR]', error);
@@ -89,8 +105,8 @@ exports.virtual_fitting = async (req, res, next) => {
     let {person_image_name, cloth_image_name} = req.body;
 
     if (!person_image_name || !cloth_image_name) {
-      person_image_name = '1732787905886-1';
-      cloth_image_name = '1732787873561-1';
+      person_image_name = '1732888439660-1';
+      cloth_image_name = '1732888491515-1';
       // return res.status(400).json({
       //     error: "Missing required fields: personImageName, clothImageName.",
       // });
@@ -115,10 +131,9 @@ exports.virtual_fitting = async (req, res, next) => {
     const json_payload = {
       person: base64_image_person,
       cloth: base64_image_cloth,
-    }
+    };
 
-                         console.log(
-                             'Sending virtual fitting request to Flask...');
+    console.log('Sending virtual fitting request to Flask...');
     const response_data = await send_virtual_fitting(json_payload, output_path);
 
     if (!response_data) {
@@ -126,7 +141,10 @@ exports.virtual_fitting = async (req, res, next) => {
     }
     console.log('Virtual fitting successful. Returning response to Flutter...');
 
-    // 결과를 Flutter로 전송
+    // 가상피팅된 base64 이미지를 저장
+    const base64_result = response_data.result;
+
+    // Flutter로 결과 전송
     return res.status(200).json({
       message: 'Virtual fitting completed successfully!',
       base64_result,
@@ -141,12 +159,5 @@ exports.virtual_fitting = async (req, res, next) => {
 };
 
 exports.images_info = async (req, res, next) => {
-  try {
-  } catch (error) {
-    console.error(error);
-    return res.status(404).json({
-      error,
-      message: 'images info error!',
-    });
-  }
+  res.status(501).json({error: 'Not implemented yet'});
 };

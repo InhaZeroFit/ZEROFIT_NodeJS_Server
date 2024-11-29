@@ -1,8 +1,17 @@
-const axios = require('axios');
 const fs = require('fs-extra');
 const path = require('path');
+const axios = require('axios');
 const dotenv = require('dotenv');
 dotenv.config();
+
+// 환경 변수 검증
+if (!process.env.FLASK_SAM_HOST || !process.env.FLASK_SAM_PORT) {
+  throw new Error('FLASK_SAM_HOST or FLASK_SAM_PORT is missing in .env file.');
+}
+if (!process.env.FLASK_VITON_HOST || !process.env.FLASK_VITON_PORT) {
+  throw new Error(
+      'FLASK_VITON_HOST or FLASK_VITON_PORT is missing in .env file.');
+}
 
 // Flask 서버 URL 설정
 const flask_sam_url = `http://${process.env.FLASK_SAM_HOST}:${
@@ -12,40 +21,79 @@ const flask_viton_url = `http://${process.env.FLASK_VITON_HOST}:${
 
 // 저장 디렉토리 설정
 const save_dir = path.join(__dirname, '../sam/results');
-const original_dir = path.join(save_dir, 'image');
-const cloth_dir = path.join(save_dir, 'cloth');
-const cloth_mask_dir = path.join(save_dir, 'cloth-mask');
-const agnostic_dir = path.join(save_dir, 'agnostic-v3.2');
-const agnostic_mask_dir = path.join(save_dir, 'agnostic-mask');
-const densepose_dir = path.join(save_dir, 'image-densepose');
+const directories = {
+  original_dir: path.join(save_dir, 'image'),
+  cloth_dir: path.join(save_dir, 'cloth'),
+  cloth_mask_dir: path.join(save_dir, 'cloth-mask'),
+  agnostic_dir: path.join(save_dir, 'agnostic-v3.2'),
+  agnostic_mask_dir: path.join(save_dir, 'agnostic-mask'),
+  densepose_dir: path.join(save_dir, 'image-densepose'),
+};
 
 // 디렉토리 생성 함수
 function CreateDirectories() {
-  fs.ensureDirSync(original_dir);
-  fs.ensureDirSync(cloth_dir);
-  fs.ensureDirSync(cloth_mask_dir);
-  fs.ensureDirSync(agnostic_dir);
-  fs.ensureDirSync(agnostic_mask_dir);
-  fs.ensureDirSync(densepose_dir);
-};
+  try {
+    Object.values(directories).forEach((dir) => {
+      fs.ensureDirSync(dir);
+    });
+    console.log('All directories created successfully!');
+  } catch (error) {
+    console.error(`Error creating directories: ${error.message}`);
+    throw error;  // 필요시 예외 전달
+  }
+}
+
+// 응답 데이터를 저장하는 함수
+function SaveResponseData(response_data, directories, base_name) {
+  for (const [key, base64_data] of Object.entries(response_data)) {
+    try {
+      const img_buffer = Buffer.from(base64_data, 'base64');
+      let save_path;
+
+      switch (key) {
+        case 'image':
+          save_path = path.join(directories.original_dir, `${base_name}.jpg`);
+          break;
+        case 'cloth':
+          save_path = path.join(directories.cloth_dir, `${base_name}.jpg`);
+          break;
+        case 'cloth_mask':
+          save_path = path.join(directories.cloth_mask_dir, `${base_name}.jpg`);
+          break;
+        case 'agnostic':
+          save_path = path.join(directories.agnostic_dir, `${base_name}.jpg`);
+          break;
+        case 'agnostic_mask':
+          save_path =
+              path.join(directories.agnostic_mask_dir, `${base_name}_mask.png`);
+          break;
+        case 'densepose':
+          save_path = path.join(directories.densepose_dir, `${base_name}.jpg`);
+          break;
+        default:
+          console.log(`Unknown key: ${key}, skipping...`);
+          continue;
+      }
+      fs.writeFileSync(save_path, img_buffer);
+    } catch (error) {
+      console.error(
+          `Failed to save file for key: ${key}. Error: ${error.message}`);
+    }
+  }
+}
 
 // Flask 서버와 통신하고 응답 처리
 exports.send_preprocess_image_request =
-    async (base64Image, includePoint, excludePoint, base_name) => {
+    async (base64Image, input_point, base_name) => {
   try {
     CreateDirectories();
 
-    if (!base64Image || !includePoint || !excludePoint || !base_name) {
+    if (!base64Image || !input_point || !base_name) {
       return res.status(400).json({
         error:
-            'Missing required fields: base64Image, includePoint, excludePoint, base_name.',
+            'Missing required fields: base64Image or input_point or user_id.',
       });
     }
-
-    const input_point = [
-      [includePoint['x'], includePoint['y']],
-      [excludePoint['x'], excludePoint['y']]
-    ];
 
     const json_payload = {
       image: base64Image,
@@ -60,38 +108,10 @@ exports.send_preprocess_image_request =
       const response_data = response.data;
 
       // 응답 데이터 저장
-      for (const [key, base64_data] of Object.entries(response_data)) {
-        const img_buffer = Buffer.from(base64_data, 'base64');
-        let save_path;
+      SaveResponseData(response_data, directories, base_name);
 
-        switch (key) {
-          case 'image':
-            save_path = path.join(original_dir, `${base_name}.jpg`);
-            break;
-          case 'cloth':
-            save_path = path.join(cloth_dir, `${base_name}.jpg`);
-            break;
-          case 'cloth_mask':
-            save_path = path.join(cloth_mask_dir, `${base_name}.jpg`);
-            break;
-          case 'agnostic':
-            save_path = path.join(agnostic_dir, `${base_name}.jpg`);
-            break;
-          case 'agnostic_mask':
-            save_path = path.join(agnostic_mask_dir, `${base_name}_mask.png`);
-            break;
-          case 'densepose':
-            save_path = path.join(densepose_dir, `${base_name}.jpg`);
-            break;
-          default:
-            console.log(`Unknown key: ${key}, skipping...`);
-            continue;
-        }
-        // 이미지 저장
-        fs.writeFileSync(save_path, img_buffer);
-      }
       console.log('Flask preprocessing successful!');
-      return response_data;  // 성공한 경우 응답 데이터 반환
+      return response.data;  // 성공한 경우 응답 데이터 반환
     } else {
       throw new Error(
           `Flask server error: ${response.status} ${response.data}`);
@@ -124,7 +144,7 @@ exports.send_virtual_fitting = async (json_payload, output_path) => {
         fs.writeFileSync(output_path, image_buffer);
 
         console.log(`Saved virtual fitting result to ${output_path}`);
-        return base64_result;  // 성공한 경우 응답 데이터 반환
+        return response_data;  // 성공한 경우 응답 데이터 반환
       } else {
         throw new Error('Error: \'result\' key not found in the response.');
       }
