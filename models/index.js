@@ -2,7 +2,6 @@ const Sequelize = require("sequelize"); // import sequelize
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config")[env];
 const User = require("./user");
-const Wardrobe = require("./wardrobe");
 const Clothes = require("./clothes");
 const Market = require("./market");
 
@@ -34,17 +33,14 @@ sequelize
 
 db.sequelize = sequelize;
 db.User = User;
-db.Wardrobe = Wardrobe;
 db.Clothes = Clothes;
 db.Market = Market;
 
 User.init(sequelize);
-Wardrobe.init(sequelize);
 Clothes.init(sequelize);
 Market.init(sequelize);
 
 User.associate(db);
-Wardrobe.associate(db);
 Clothes.associate(db);
 Market.associate(db);
 

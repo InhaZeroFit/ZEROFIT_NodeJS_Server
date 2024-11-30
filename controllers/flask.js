@@ -5,7 +5,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Flask 서버 URL 설정
-const flask_url = `http://${process.env.FLASK_HOST}:${process.env.FLASK_PORT}/preprocess`;
+const flask_sam_url = `http://${process.env.FLASK_SAM_HOST}:${process.env.FLASK_SAM_PORT}/preprocess`;
+const flask_viton_url = `http://${process.env.FLASK_VITON_HOST}:${process.env.FLASK_VITON_PORT}/ootd`;
 
 // 저장 디렉토리 설정
 const save_dir = path.join(__dirname, '../sam/results');
@@ -16,30 +17,23 @@ const agnostic_dir = path.join(save_dir, 'agnostic-v3.2');
 const agnostic_mask_dir = path.join(save_dir, 'agnostic-mask');
 const densepose_dir = path.join(save_dir, 'image-densepose');
 
-// 디렉토리 생성 함수
-const CreateDirectories = () => {
-    fs.ensureDirSync(original_dir);
-    fs.ensureDirSync(cloth_dir);
-    fs.ensureDirSync(cloth_mask_dir);
-    fs.ensureDirSync(agnostic_dir);
-    fs.ensureDirSync(agnostic_mask_dir);
-    fs.ensureDirSync(densepose_dir);
-};
-
 // Flask 서버와 통신하고 응답 처리
-exports.send_image_to_flask = async (base64Image, includePoint, excludePoint, base_name) => {
+exports.send_preprocess_image_request = async (base64Image, includePoint, excludePoint, base_name) => {
     try {
-        // 디렉토리 생성
-        CreateDirectories();
+        if (!base64Image || !includePoint || !excludePoint || !base_name) {
+            return res.status(400).json({
+                error: "Missing required fields: base64Image, includePoint, excludePoint, base_name.",
+            });
+        }
 
         const input_point = [[includePoint['x'], includePoint['y']], [excludePoint['x'], excludePoint['y']]];
 
-        const flask_request_data = {
+        const json_payload = {
             image: base64Image,
             input_point,
         };
 
-        const response = await axios.post(flask_url, flask_request_data, {
+        const response = await axios.post(flask_sam_url, json_payload, {
             headers: { 'Content-Type': 'application/json' },
         });
 
@@ -87,3 +81,41 @@ exports.send_image_to_flask = async (base64Image, includePoint, excludePoint, ba
         throw error; // 호출 함수에 예외 전달
     }
 }
+
+// `send_virtual_fitting` 함수
+exports.send_virtual_fitting = async (json_payload, output_path) => {
+    try {
+        // Flask 서버로 요청 전송
+        const response = await axios.post(flask_viton_url, json_payload, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (response.status === 200) {
+            const response_data = response.data;
+
+            // 'result' 키가 있는지 확인
+            if ("result" in response_data) {
+                const base64_result = response_data.result;
+
+                // Base64 디코딩
+                const image_buffer = Buffer.from(base64_result, 'base64');
+
+                // 결과 이미지 저장
+                fs.writeFileSync(output_path, image_buffer);
+
+                console.log(`Saved virtual fitting result to ${output_path}`);
+                return response_data; // 성공한 경우 응답 데이터 반환
+            } else {
+                throw new Error("Error: 'result' key not found in the response.");
+            }
+        } else {
+            throw new Error(`VITON server error: ${response.status} ${response.data}`);
+        }
+    } catch (error) {
+        console.error('Error during virtual fitting:', error.message);
+        if (error.response) {
+            console.error('Server response:', error.response.data);
+        }
+        throw error; // 호출 함수에 예외 전달
+    }
+};

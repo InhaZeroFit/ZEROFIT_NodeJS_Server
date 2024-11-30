@@ -1,5 +1,17 @@
+const fs = require("fs");
+const path = require('path');
 const { Clothes } = require("../models");
-const { send_image_to_flask } = require("./user");
+const { send_preprocess_image_request, send_virtual_fitting } = require("./flask");
+
+function ImageToBase64(imagePath) {
+    try {
+        const imageBuffer = fs.readFileSync(imagePath); // 파일 읽기
+        return Buffer.from(imageBuffer).toString('base64'); // Base64 인코딩
+    } catch (error) {
+        console.error(`Error reading file at ${imagePath}:`, error.message);
+        throw error;
+    }
+}
 
 // 이미지 업로드 컨트롤러
 exports.upload_image = async (req, res, next) => {
@@ -9,13 +21,19 @@ exports.upload_image = async (req, res, next) => {
 
         // 요청에서 데이터 가져오기
         const { base64Image, clothingName, rating, clothingType, clothingStyle, imageMemo, includePoint, excludePoint } = req.body;
-    
+        
+        if (!base64Image || !clothingName || !rating || !clothingType || !clothingStyle || !includePoint || !excludePoint) {
+            return res.status(400).json({
+                error: "Missing required fields: base64Image, clothingName, rating, clothingType, clothingStyle, imageMemo, includePoint, excludePoint."
+            });
+        }
+
         // 파일 이름과 경로 생성
         const base_name = `${Date.now()}-${user_id}`;
 
         // Flask 서버로 이미지 전송
         console.log("Sending image to Flask for preprocessing...");
-        const flask_response = await send_image_to_flask(base64Image, includePoint, excludePoint, base_name);
+        const flask_response = await send_preprocess_image_request(base64Image, includePoint, excludePoint, base_name);
 
         if (!flask_response) {
             throw new Error("Flask preprocessing failed.");
@@ -46,6 +64,61 @@ exports.upload_image = async (req, res, next) => {
         console.error("[UPLOAD ERROR]", error);
         return res.status(500).json({
             error: "Image upload and processing failed.",
+            details: error.message,
+        });
+    }
+};
+
+// 가상 피팅 컨트롤러
+exports.virtual_fitting = async (req, res, next) => {
+    try {
+
+        // 요청에서 데이터 가져오기
+        let { person_image_name, cloth_image_name } = req.body;
+
+        if (!person_image_name || !cloth_image_name) {
+            person_image_name = "1732787905886-1";
+            cloth_image_name = "1732787873561-1";
+            // return res.status(400).json({
+            //     error: "Missing required fields: personImageName, clothImageName.",
+            // });
+        }
+
+        // 이미지 경로 설정
+        const load_dir = path.join(__dirname, '../sam/results');
+        const person_image_path = path.join(load_dir, `image/${person_image_name}.jpg`);
+        const cloth_image_path = path.join(load_dir, `cloth/${cloth_image_name}.jpg`);
+
+        const save_dir = path.join(__dirname, '../viton/results');
+        const output_path = path.join(save_dir, `${person_image_name}_${cloth_image_name}.jpg`);
+        
+        // base64Image로 변환
+        const base64_image_person = ImageToBase64(person_image_path);
+        const base64_image_cloth = ImageToBase64(cloth_image_path);
+
+        // jsonPayload 작성
+        const json_payload = {
+            person : base64_image_person,
+            cloth : base64_image_cloth,
+        }
+
+        console.log("Sending virtual fitting request to Flask...");
+        const flaskResponse = await send_virtual_fitting(json_payload, output_path);
+
+        if (!flaskResponse) {
+            throw new Error("Virtual fitting request failed.");
+        }
+        console.log("Virtual fitting successful. Returning response to Flutter...");
+
+        // 결과를 Flutter로 전송
+        return res.status(200).json({
+            message: "Virtual fitting completed successfully!",
+            flaskResponse,
+        });
+    } catch (error) {
+        console.error("[VIRTUAL FITTING ERROR]", error);
+        return res.status(500).json({
+            error: "Virtual fitting failed.",
             details: error.message,
         });
     }

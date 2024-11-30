@@ -70,10 +70,6 @@ class User extends Sequelize.Model {
         })
     };
     static associate(db) {
-        db.User.hasMany(db.Wardrobe, {
-            foreignKey : "user_id",   // FK of wardrobes table
-            sourceKey : "user_id",     // PK of users table
-        });
         db.User.hasMany(db.Clothes, {
             foreignKey : "user_id",
             sourceKey : "user_id",
