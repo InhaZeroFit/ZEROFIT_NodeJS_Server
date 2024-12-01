@@ -53,10 +53,10 @@ exports.upload_image = async (req, res, next) => {
 
     // Flask 서버로 이미지 전송
     console.log('Sending image to Flask for preprocessing...');
-    const response = await send_preprocess_image_request(
+    const response_data = await send_preprocess_image_request(
         base64Image, input_point, base_name);
 
-    if (!response) {
+    if (!response_data) {
       throw new Error('Flask preprocessing failed.');
     }
 
@@ -64,10 +64,10 @@ exports.upload_image = async (req, res, next) => {
 
     // Flask 전처리가 성공하면 Clothes 테이블에 데이터 저장
     try {
-      const saved_clothes = await Clothes.create({
+      await Clothes.create({
         image_name: `${base_name}`,
-        name: clothingName,
-        score: rating,
+        clothes_name: clothingName,
+        rating: rating,
         clothes_type: clothingType,
         clothes_style: clothingStyle,
         memo: imageMemo,
@@ -87,7 +87,7 @@ exports.upload_image = async (req, res, next) => {
     // Flutter로 결과 전송
     return res.status(200).json({
       message: 'Image uploaded and processed successfully!',
-      response,
+      response: response_data,
     });
   } catch (error) {
     console.error('[UPLOAD ERROR]', error);
@@ -158,6 +158,63 @@ exports.virtual_fitting = async (req, res, next) => {
   }
 };
 
+// GET /clothes/info API 구현
 exports.images_info = async (req, res, next) => {
-  res.status(501).json({error: 'Not implemented yet'});
+  try {
+    // JWT에서 user_id 가져오기
+    const user_id = req.user.user_id;
+
+    // DB에서 user_id와 일치하는 clothes 조회
+    const clothes = await Clothes.findAll({
+      where: {user_id},
+      attributes: [
+        'image_name', 'clothes_name', 'rating', 'clothes_type', 'clothes_style',
+        'memo'
+      ],  // 필요한 컬럼만 가져오기
+    });
+
+    if (!clothes || clothes.length === 0) {
+      return res.status(404).json({
+        error: 'No clothing information found for the user.',
+      });
+    }
+
+    // Cloth 디렉토리 경로 설정
+    const cloth_dir = path.join(__dirname, '../sam/results/cloth');
+
+    // base64_images와 images_info를 저장할 배열 초기화
+    const base64_images = [];
+    const images_info = [];
+
+    // clothes 배열을 순회하며 이미지 처리
+    clothes.forEach((item) => {
+      const image_path = path.join(cloth_dir, `${item.image_name}.jpg`);
+      if (fs.existsSync(image_path)) {
+        // 이미지가 존재하면 base64 변환 및 데이터 추가
+        base64_images.push(ImageToBase64(image_path));
+        images_info.push({
+          image_name: item.image_name,
+          clothes_name: item.clothes_name,
+          rating: item.rating,
+          clothes_type: item.clothes_type,
+          clothes_style: item.clothes_style,
+          memo: item.memo,
+        });
+      } else {
+        console.warn(`Image file not found: ${item.image_name}`);
+      }
+    });
+    console.log(images_info);
+    // 최종 결과 반환
+    return res.status(200).json({
+      base64_images,  // base64로 변환된 이미지 배열
+      images_info,    // 이미지 정보 배열
+    });
+  } catch (error) {
+    console.error('[IMAGES INFO ERROR]', error);
+    return res.status(500).json({
+      error: 'Failed to retrieve clothing information.',
+      details: error.message,
+    });
+  }
 };

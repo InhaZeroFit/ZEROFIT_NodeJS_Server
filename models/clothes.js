@@ -15,11 +15,11 @@ class Clothes extends Sequelize.Model {
             type: Sequelize.STRING(100),
             allowNull: false,
           },
-          name: {
+          clothes_name: {
             type: Sequelize.STRING(30),
             allowNull: false,
           },
-          score: {
+          rating: {
             type: Sequelize.ENUM('1', '2', '3', '4', '5'),
             allowNull: false,
           },

@@ -31,7 +31,7 @@ exports.join = async (req, res, next) => {
     // Create new user.
     const new_user = await User.create({
       email,
-      nick: nick || 'noname',
+      nick: nick || 'nonick',
       password: hashed_password,
       phone_number,
       name,

@@ -24,10 +24,6 @@ const save_dir = path.join(__dirname, '../sam/results');
 const directories = {
   original_dir: path.join(save_dir, 'image'),
   cloth_dir: path.join(save_dir, 'cloth'),
-  cloth_mask_dir: path.join(save_dir, 'cloth-mask'),
-  agnostic_dir: path.join(save_dir, 'agnostic-v3.2'),
-  agnostic_mask_dir: path.join(save_dir, 'agnostic-mask'),
-  densepose_dir: path.join(save_dir, 'image-densepose'),
 };
 
 // 디렉토리 생성 함수
@@ -56,19 +52,6 @@ function SaveResponseData(response_data, directories, base_name) {
           break;
         case 'cloth':
           save_path = path.join(directories.cloth_dir, `${base_name}.jpg`);
-          break;
-        case 'cloth_mask':
-          save_path = path.join(directories.cloth_mask_dir, `${base_name}.jpg`);
-          break;
-        case 'agnostic':
-          save_path = path.join(directories.agnostic_dir, `${base_name}.jpg`);
-          break;
-        case 'agnostic_mask':
-          save_path =
-              path.join(directories.agnostic_mask_dir, `${base_name}_mask.png`);
-          break;
-        case 'densepose':
-          save_path = path.join(directories.densepose_dir, `${base_name}.jpg`);
           break;
         default:
           console.log(`Unknown key: ${key}, skipping...`);
