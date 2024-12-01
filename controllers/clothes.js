@@ -105,11 +105,9 @@ exports.virtual_fitting = async (req, res, next) => {
     let {person_image_name, cloth_image_name} = req.body;
 
     if (!person_image_name || !cloth_image_name) {
-      person_image_name = '1732888439660-1';
-      cloth_image_name = '1732888491515-1';
-      // return res.status(400).json({
-      //     error: "Missing required fields: personImageName, clothImageName.",
-      // });
+      return res.status(400).json({
+        error: 'Missing required fields: personImageName, clothImageName.',
+      });
     }
 
     // 이미지 경로 설정
