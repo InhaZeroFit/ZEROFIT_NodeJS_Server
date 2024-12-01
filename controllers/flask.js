@@ -21,16 +21,21 @@ const flask_viton_url = `http://${process.env.FLASK_VITON_HOST}:${
     process.env.FLASK_VITON_PORT}/ootd`;
 
 // 저장 디렉토리 설정
-const save_dir = path.join(__dirname, '../sam/results');
-const directories = {
-  cloth_dir: path.join(save_dir, 'cloth'),
-  image_dir: path.join(save_dir, 'image'),
+const base_sam_dir = path.join(__dirname, '../sam/results');
+const base_viton_dir = path.join(__dirname, '../viton');
+const sam_dirs = {
+  cloth_dir: path.join(base_sam_dir, 'cloth'),
+  image_dir: path.join(base_sam_dir, 'image'),
+};
+const viton_dirs = {
+  results_dir: path.join(base_viton_dir, 'results'),
 };
 
+
 // 디렉토리 생성 함수
-function CreateDirectories() {
+function CreateDirectories(input_dir) {
   try {
-    Object.values(directories).forEach((dir) => {
+    Object.values(input_dir).forEach((dir) => {
       fs.ensureDirSync(dir);
     });
   } catch (error) {
@@ -66,7 +71,7 @@ function SaveResponseData(response_data, directories, base_name) {
 exports.send_preprocess_image_request =
     async (base64Image, input_point, base_name) => {
   try {
-    CreateDirectories();
+    CreateDirectories(base_sam_dir);
 
     if (!base64Image || !input_point || !base_name) {
       return res.status(400).json({
@@ -88,7 +93,7 @@ exports.send_preprocess_image_request =
       const response_data = response.data;
 
       // 응답 데이터 저장
-      SaveResponseData(response_data, directories, base_name);
+      SaveResponseData(response_data, sam_dirs, base_name);
 
       console.log('[upload_image] Flask preprocessing successful!');
       return response.data;  // 성공한 경우 응답 데이터 반환
@@ -105,6 +110,7 @@ exports.send_preprocess_image_request =
 // `send_virtual_fitting` 함수
 exports.send_virtual_fitting = async (json_payload, user_id) => {
   try {
+    CreateDirectories(viton_dirs);
     // Flask 서버로 요청 전송
     const response = await axios.post(flask_viton_url, json_payload, {
       headers: {'Content-Type': 'application/json'},

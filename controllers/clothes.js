@@ -199,7 +199,7 @@ exports.virtual_fitting = async (req, res, next) => {
       base64_image,
     });
   } catch (error) {
-    console.error('[VIRTUAL FITTING ERROR]', error);
+    console.error('[virtual_fitting_error]', error);
     return res.status(500).json({
       error: 'Virtual fitting failed.',
       details: error.message,
