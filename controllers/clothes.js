@@ -142,12 +142,12 @@ exports.virtual_fitting = async (req, res, next) => {
     console.log('Virtual fitting successful. Returning response to Flutter...');
 
     // 가상피팅된 base64 이미지를 저장
-    const base64_result = response_data.result;
+    const base64_image = response_data.result;
 
     // Flutter로 결과 전송
     return res.status(200).json({
       message: 'Virtual fitting completed successfully!',
-      base64_result,
+      base64_image,
     });
   } catch (error) {
     console.error('[VIRTUAL FITTING ERROR]', error);
