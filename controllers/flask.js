@@ -32,7 +32,6 @@ function CreateDirectories() {
     Object.values(directories).forEach((dir) => {
       fs.ensureDirSync(dir);
     });
-    console.log('All directories created successfully!');
   } catch (error) {
     console.error(`Error creating directories: ${error.message}`);
     throw error;  // 필요시 예외 전달
