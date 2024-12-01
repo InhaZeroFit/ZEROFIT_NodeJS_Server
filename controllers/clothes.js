@@ -162,8 +162,7 @@ exports.virtual_fitting = async (req, res, next) => {
 exports.images_info = async (req, res, next) => {
   try {
     // JWT에서 user_id 가져오기
-    // const user_id = req.user.user_id;
-    const user_id = '1';
+    const user_id = req.user.user_id;
 
     // DB에서 user_id와 일치하는 clothes 조회
     const clothes = await Clothes.findAll({
