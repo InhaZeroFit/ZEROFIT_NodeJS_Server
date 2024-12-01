@@ -45,10 +45,15 @@ class User extends Sequelize.Model {
             allowNull: true,
             defaultValue: 'noname',
           },
-          profile_photo: {
+          person_image: {
             type: Sequelize.STRING(100),
             allowNull: true,
-            defaultValue: '/public/default_images/default_image.png',
+            defaultValue: 'default_image',
+          },
+          profile_image: {
+            type: Sequelize.STRING(100),
+            allowNull: true,
+            defaultValue: 'default_image',
           },
           payment: {
             type: Sequelize.STRING(20),

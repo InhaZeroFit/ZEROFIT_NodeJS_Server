@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const {User} = require('../models');
 dotenv.config();
 
 // 환경 변수 검증
@@ -22,7 +23,6 @@ const flask_viton_url = `http://${process.env.FLASK_VITON_HOST}:${
 // 저장 디렉토리 설정
 const save_dir = path.join(__dirname, '../sam/results');
 const directories = {
-  original_dir: path.join(save_dir, 'image'),
   cloth_dir: path.join(save_dir, 'cloth'),
 };
 
@@ -47,9 +47,6 @@ function SaveResponseData(response_data, directories, base_name) {
       let save_path;
 
       switch (key) {
-        case 'image':
-          save_path = path.join(directories.original_dir, `${base_name}.jpg`);
-          break;
         case 'cloth':
           save_path = path.join(directories.cloth_dir, `${base_name}.jpg`);
           break;
@@ -106,7 +103,7 @@ exports.send_preprocess_image_request =
 };
 
 // `send_virtual_fitting` 함수
-exports.send_virtual_fitting = async (json_payload, output_path) => {
+exports.send_virtual_fitting = async (json_payload, user_id) => {
   try {
     // Flask 서버로 요청 전송
     const response = await axios.post(flask_viton_url, json_payload, {
@@ -123,10 +120,19 @@ exports.send_virtual_fitting = async (json_payload, output_path) => {
         // Base64 디코딩
         const image_buffer = Buffer.from(base64_result, 'base64');
 
+        // 가상 피팅 이미지 결과 저장 경로 설정
+        const save_dir = path.join(__dirname, '../viton/results');
+        const output_name = `${Date.now()}-${user_id}`;
+        const output_path = path.join(save_dir, `${output_name}.jpg`);
+
+        // 저장 디렉터리 존재 여부 검증
+        if (!fs.existsSync(save_dir)) {
+          fs.mkdirSync(save_dir, {recursive: true});
+        }
         // 결과 이미지 저장
         fs.writeFileSync(output_path, image_buffer);
-
         console.log(`Saved virtual fitting result to ${output_path}`);
+
         return response_data;  // 성공한 경우 응답 데이터 반환
       } else {
         throw new Error('Error: \'result\' key not found in the response.');
