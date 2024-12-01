@@ -90,7 +90,7 @@ exports.send_preprocess_image_request =
       // 응답 데이터 저장
       SaveResponseData(response_data, directories, base_name);
 
-      console.log('Flask preprocessing successful!');
+      console.log('[upload_image] Flask preprocessing successful!');
       return response.data;  // 성공한 경우 응답 데이터 반환
     } else {
       throw new Error(
@@ -131,7 +131,8 @@ exports.send_virtual_fitting = async (json_payload, user_id) => {
         }
         // 결과 이미지 저장
         fs.writeFileSync(output_path, image_buffer);
-        console.log(`Saved virtual fitting result to ${output_path}`);
+        console.log(
+            `[virtual_fitting] Saved virtual fitting result to ${output_path}`);
 
         return response_data;  // 성공한 경우 응답 데이터 반환
       } else {

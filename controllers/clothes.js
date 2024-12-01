@@ -52,7 +52,7 @@ exports.upload_image = async (req, res, next) => {
     const base_name = `${Date.now()}-${user_id}`;
 
     // Flask 서버로 이미지 전송
-    console.log('Sending image to Flask for preprocessing...');
+    console.log('[upload_image] Sending image to Flask for preprocessing...');
     const response_data = await send_preprocess_image_request(
         base64Image, input_point, base_name);
 
@@ -60,7 +60,8 @@ exports.upload_image = async (req, res, next) => {
       throw new Error('Flask preprocessing failed.');
     }
 
-    console.log('Flask preprocessing successful. Saving to DB...');
+    console.log(
+        '[upload_image] Flask preprocessing successful. Saving to DB...');
 
     // Flask 전처리가 성공하면 Clothes 테이블에 데이터 저장
     try {
@@ -75,7 +76,7 @@ exports.upload_image = async (req, res, next) => {
         exclude_point: excludePoint,
         user_id,
       });
-      console.log('MySQL successfully saved clothes.');
+      console.log('[upload_image] MySQL successfully saved clothes.');
     } catch (error) {
       if (error.name === 'SequelizeValidationError') {
         return res.status(400).json(
@@ -134,14 +135,16 @@ exports.virtual_fitting = async (req, res, next) => {
       }
       // 결과 이미지 저장
       fs.writeFileSync(output_path, image_buffer);
-      console.log(`Saved new person image to ${output_path} before fitting`);
+      console.log(`[virtual_fitting] Saved new person image to ${
+          output_path} before fitting`);
 
       // 사용자 person image 업데이트
       await User.update(
           {person_image: output_name},  // profile_photo에 상대 경로 저장
           {where: {user_id}}            // 조건: user_id가 일치하는 사용자
       );
-      console.log(`Updated person_image for user_id ${user_id}`);
+      console.log(
+          `[virtual_fitting] Updated person_image for user_id ${user_id}`);
 
     } else {  // 기존 이미지 사용시
       const user = await User.findOne({
@@ -177,13 +180,15 @@ exports.virtual_fitting = async (req, res, next) => {
       cloth: base64_image_cloth,
     };
 
-    console.log('Sending virtual fitting request to Flask...');
+    console.log(
+        '[virtual_fitting] Sending virtual fitting request to Flask...');
     const response_data = await send_virtual_fitting(json_payload, user_id);
 
     if (!response_data) {
       throw new Error('Virtual fitting request failed.');
     }
-    console.log('Virtual fitting successful. Returning response to Flutter...');
+    console.log(
+        '[virtual_fitting] Virtual fitting successful. Returning response to Flutter...');
 
     // 가상피팅된 base64 이미지를 저장
     const base64_image = response_data.result;
@@ -273,13 +278,15 @@ exports.images_info = async (req, res, next) => {
       if (fs.existsSync(person_image_path)) {
         person_base64_image =
             ImageToBase64(person_image_path);  // Base64로 변환
-        console.log('User is using the saved person image from MySQL.');
+        console.log(
+            '[images_info] User is using the saved person image from MySQL.');
       } else {
-        console.warn(`Person image file not found: ${person_image_path}`);
+        console.log(
+            `[images_info] Person image file not found: ${person_image_path}`);
       }
     } else {
       // 기본 이미지일 경우 base64_image는 null
-      console.info('User is using the default image.');
+      console.info('[images_info] User is using the default image.');
     }
     // 최종 결과 반환
     return res.status(200).json({
