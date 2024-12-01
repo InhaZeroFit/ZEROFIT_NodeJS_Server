@@ -12,6 +12,5 @@ router.post('/virtual_fitting', jwt_middleware, virtual_fitting);
 
 // GET /clothes/info
 router.post('/info', jwt_middleware, images_info);
-// router.get('/info', images_info);
 
 module.exports = router;
