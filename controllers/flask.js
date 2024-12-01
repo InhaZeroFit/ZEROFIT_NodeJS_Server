@@ -24,6 +24,7 @@ const flask_viton_url = `http://${process.env.FLASK_VITON_HOST}:${
 const save_dir = path.join(__dirname, '../sam/results');
 const directories = {
   cloth_dir: path.join(save_dir, 'cloth'),
+  image_dir: path.join(save_dir, 'image'),
 };
 
 // 디렉토리 생성 함수
