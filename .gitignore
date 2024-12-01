@@ -16,3 +16,8 @@ viton/results/
 
 # public 폴더
 public/uploads/clothes/
+
+# VSCode
+.vscode/
+
+test/
