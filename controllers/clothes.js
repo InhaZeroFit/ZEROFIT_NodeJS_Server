@@ -162,7 +162,8 @@ exports.virtual_fitting = async (req, res, next) => {
 exports.images_info = async (req, res, next) => {
   try {
     // JWT에서 user_id 가져오기
-    const user_id = req.user.user_id;
+    // const user_id = req.user.user_id;
+    const user_id = '1';
 
     // DB에서 user_id와 일치하는 clothes 조회
     const clothes = await Clothes.findAll({
@@ -182,34 +183,37 @@ exports.images_info = async (req, res, next) => {
     // Cloth 디렉토리 경로 설정
     const cloth_dir = path.join(__dirname, '../sam/results/cloth');
 
-    // base64_images와 images_info를 저장할 배열 초기화
-    const base64_images = [];
-    const images_info = [];
-
-    // clothes 배열을 순회하며 이미지 처리
-    clothes.forEach((item) => {
+    // clothes 배열을 순회하며 이미지 및 데이터를 포함한 새로운 구조 생성
+    const clothes_with_images = clothes.map((item) => {
       const image_path = path.join(cloth_dir, `${item.image_name}.jpg`);
+      let base64_image = null;
+
+      // 이미지가 존재할 경우 base64 변환
       if (fs.existsSync(image_path)) {
-        // 이미지가 존재하면 base64 변환 및 데이터 추가
-        base64_images.push(ImageToBase64(image_path));
-        images_info.push({
-          image_name: item.image_name,
-          clothes_name: item.clothes_name,
-          rating: item.rating,
-          clothes_type: item.clothes_type,
-          clothes_style: item.clothes_style,
-          memo: item.memo,
-        });
+        base64_image = ImageToBase64(image_path);
       } else {
         console.warn(`Image file not found: ${item.image_name}`);
       }
+
+      // 새로운 객체 생성
+      return {
+        image_name: item.image_name,
+        base64_image,  // base64 변환된 이미지 추가
+        clothes_name: item.clothes_name,
+        rating: item.rating,
+        clothes_type: item.clothes_type,
+        clothes_style: item.clothes_style,
+        memo: item.memo,
+      };
     });
-    console.log(images_info);
+
+    console.log(clothes_with_images);
+    // 최종 결과 반환
     // 최종 결과 반환
     return res.status(200).json({
-      base64_images,  // base64로 변환된 이미지 배열
-      images_info,    // 이미지 정보 배열
+      clothes: clothes_with_images,  // 이미지와 데이터를 포함한 배열
     });
+
   } catch (error) {
     console.error('[IMAGES INFO ERROR]', error);
     return res.status(500).json({
