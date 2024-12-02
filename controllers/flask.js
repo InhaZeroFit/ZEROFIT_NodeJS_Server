@@ -18,7 +18,7 @@ if (!process.env.FLASK_VITON_HOST || !process.env.FLASK_VITON_PORT) {
 const flask_sam_url = `http://${process.env.FLASK_SAM_HOST}:${
     process.env.FLASK_SAM_PORT}/preprocess`;
 const flask_viton_url = `http://${process.env.FLASK_VITON_HOST}:${
-    process.env.FLASK_VITON_PORT}/ootd`;
+    process.env.FLASK_VITON_PORT}/kolors`;
 
 // 저장 디렉토리 설정
 const base_sam_dir = path.join(__dirname, '../sam/results');
