@@ -218,7 +218,7 @@ exports.images_info = async (req, res, next) => {
       where: {user_id},
       attributes: [
         'image_name', 'clothes_name', 'rating', 'clothes_type', 'clothes_style',
-        'memo'
+        'memo', 'clothes_id'
       ],  // 필요한 컬럼만 가져오기
     });
 
