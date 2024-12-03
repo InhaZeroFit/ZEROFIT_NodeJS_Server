@@ -63,7 +63,12 @@ class User extends Sequelize.Model {
             type: Sequelize.DATE,
             allowNull: true,  // NULL means the user didn't login.
             defaultValue: Sequelize.DataTypes.NOW,
-          }
+          },
+          // 옷 판매시 필요한 컬럼 추가
+          bank_account: {
+            type: Sequelize.STRING(30),
+            allowNull: true,  // 계좌번호는 필수 입력이 아닙니다.
+          },
         },
         {
           sequelize,
