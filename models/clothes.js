@@ -50,7 +50,6 @@ class Clothes extends Sequelize.Model {
             allowNull: true,
           },
           include_point: {
-            // 새롭게 추가된 컬럼
             type: Sequelize.TEXT,
             allowNull: true,
             get() {
@@ -62,7 +61,6 @@ class Clothes extends Sequelize.Model {
             },
           },
           exclude_point: {
-            // 새롭게 추가된 컬럼
             type: Sequelize.TEXT,
             allowNull: true,
             get() {
@@ -74,8 +72,7 @@ class Clothes extends Sequelize.Model {
             },
           },
           size: {
-            type: Sequelize.DataTypes.ENUM(
-                '90', '95', '100', '105', '110', 'Other'),
+            type: Sequelize.DataTypes.ENUM('S', 'M', 'L', 'XL', 'XXL', 'FREE'),
             allowNull: true,
           },
           color: {
@@ -85,7 +82,32 @@ class Clothes extends Sequelize.Model {
           date_purchase: {
             type: Sequelize.STRING(10),
             allowNull: true,
-          }
+          },
+          // 옷 판매시 필요한 컬럼 추가
+          is_sale: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+          },
+          price: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
+          },
+          post_name: {
+            type: Sequelize.STRING(50),
+            allowNull: true,
+          },
+          sale_type: {
+            type: Sequelize.TEXT,  // JSON 데이터를 저장
+            allowNull: true,
+            get() {
+              const rawValue = this.getDataValue('sale_type');
+              return rawValue ? JSON.parse(rawValue) : [];
+            },
+            set(value) {
+              this.setDataValue('sale_type', JSON.stringify(value));
+            },
+          },
         },
         {
           sequelize,

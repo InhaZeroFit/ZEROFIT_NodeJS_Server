@@ -252,6 +252,7 @@ exports.images_info = async (req, res, next) => {
         clothes_type: item.clothes_type,
         clothes_style: item.clothes_style,
         memo: item.memo,
+        clothes_id: item.clothes_id
       };
     });
 
