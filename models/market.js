@@ -40,6 +40,7 @@ class Market extends Sequelize.Model {
     db.Market.belongsTo(db.Clothes, {
       foreignKey: 'clothes_id',
       targetKey: 'clothes_id',
+      as: 'Clothes', // 별칭 설정
     });
   };
 }

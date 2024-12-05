@@ -96,8 +96,13 @@ class User extends Sequelize.Model {
     db.User.hasMany(db.Clothes, {
       foreignKey: 'user_id',
       sourceKey: 'user_id',
+      as: 'Clothes', // 별칭 설정
     });
     db.User.hasMany(db.Market, {
+      foreignKey: 'user_id',
+      sourceKey: 'user_id',
+    });
+    db.User.hasMany(db.Wishlist, {
       foreignKey: 'user_id',
       sourceKey: 'user_id',
     });

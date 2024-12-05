@@ -129,6 +129,10 @@ class Clothes extends Sequelize.Model {
       foreignKey: 'clothes_id',
       sourceKey: 'clothes_id',
     });
+    db.Clothes.hasMany(db.Wishlist, {
+      foreignKey: 'clothes_id',
+      sourceKey: 'clothes_id',
+    });
   };
 }
 
