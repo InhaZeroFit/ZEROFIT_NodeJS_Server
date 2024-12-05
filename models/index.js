@@ -4,6 +4,7 @@ const config = require(__dirname + '/../config/config')[env];
 const User = require('./user');
 const Clothes = require('./clothes');
 const Market = require('./market');
+const Wishlist = require('./wishlist');
 
 const db = {};
 
@@ -30,13 +31,16 @@ db.sequelize = sequelize;
 db.User = User;
 db.Clothes = Clothes;
 db.Market = Market;
+db.Wishlist = Wishlist;
 
 User.init(sequelize);
 Clothes.init(sequelize);
 Market.init(sequelize);
+Wishlist.init(sequelize);
 
 User.associate(db);
 Clothes.associate(db);
 Market.associate(db);
+Wishlist.associate(db);
 
 module.exports = db;
