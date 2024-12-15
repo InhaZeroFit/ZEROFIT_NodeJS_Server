@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "prod": "cross-env NODE_ENV=production PORT=10103 pm2 start server.js",
-    "dev": "cross-env NODE_ENV=development PORT=10103 nodemon server.js"
+    "dev": "cross-env NODE_ENV=development PORT=10103 nodemon server.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,8 @@
   },
   "devDependencies": {
     "eslint": "^9.14.0",
-    "globals": "^15.12.0"
+    "globals": "^15.12.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }
