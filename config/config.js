@@ -21,12 +21,12 @@ module.exports = {
     port : process.env.SEQUELIZE_DEV_PORT,
   },
   test : {
-    username : process.env.SEQUELIZE_USERNAME,
-    password : process.env.SEQUELIZE_PASSWORD,
-    database : process.env.SEQUELIZE_DB_TEST,
-    host : process.env.SEQUELIZE_HOST,
+    username : process.env.SEQUELIZE_TEST_USERNAME,
+    password : process.env.SEQUELIZE_TEST_PASSWORD,
+    database : process.env.SEQUELIZE_TEST_DB,
+    host : process.env.SEQUELIZE_TEST_HOST,
     dialect : 'mysql',
-    port : process.env.SEQUELIZE_PORT,
+    port : process.env.SEQUELIZE_TEST_PORT,
   },
   production : {
     username : process.env.SEQUELIZE_USERNAME,

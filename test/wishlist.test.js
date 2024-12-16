@@ -8,8 +8,11 @@
  * Latest Updated Date: 2024-12-16
  */
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const request = require('supertest');  // Supertest for HTTP requests
-const app = 'http://localhost:10103';  // 서버 URL
+const app = `${process.env.TEST_SERVER_URL}`;
 
 describe('Wishlist API Tests', () => {
   let token;
@@ -31,11 +34,11 @@ describe('Wishlist API Tests', () => {
   test('POST /wishlist/add - Add item to wishlist', async () => {
     const res = await request(app)
                     .post('/wishlist/add')
-                    .set('Authorization', `Bearer ${token}`)  // JWT 토큰 설정
-                    .send({
-                      userId: 1,
-                      clothes_id: 3,
-                    });
+                    .set('Authorization', `Bearer ${token}`)  // JWT 토큰
+    설정.send({
+      userId: 1,
+      clothes_id: 3,
+    });
 
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Item added to wishlist.');
@@ -50,6 +53,7 @@ describe('Wishlist API Tests', () => {
                     });
 
     expect(res.status).toBe(200);
-    expect(res.body.clothes).toBeInstanceOf(Array);  // clothes는 배열이어야 함
+    expect(res.body.clothes).toBeInstanceOf(Array);  // clothes는 배열이어야
+    함
   });
 });
