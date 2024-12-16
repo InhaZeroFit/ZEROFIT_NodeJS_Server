@@ -99,6 +99,11 @@ class Clothes extends Sequelize.Model {
             allowNull: false,
             defaultValue: false,
           },
+          is_sold: {
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue: false,  // 기본값은 false (판매되지 않음)
+          },
           price: {
             type: Sequelize.INTEGER,
             allowNull: true,
