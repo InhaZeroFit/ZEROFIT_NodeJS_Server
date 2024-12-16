@@ -104,7 +104,7 @@ class Clothes extends Sequelize.Model {
             allowNull: true,
             defaultValue: false,  // 기본값은 false (판매되지 않음)
           },
-          sole_to: {
+          sold_to: {
             type: Sequelize.INTEGER,
             allowNull: true,
           },
