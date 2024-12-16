@@ -186,7 +186,11 @@ exports.purchase_clothes = async (req, res, next) => {
 
     // 2. 판매 상태 업데이트 (is_sold = true)
     const [updatedCount] = await Clothes.update(
-        {is_sold: true, is_sale: false},  // 판매된 상태로 변경
+        {
+          is_sold: true,
+          is_sale: false,
+          sold_to: user_id
+        },  // 판매된 상태로 변경
         {where: {clothes_id}});
 
     if (updatedCount === 0) {
