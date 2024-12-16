@@ -159,3 +159,57 @@ exports.market_info = async (req, res, next) => {
     });
   }
 };
+exports.purchase_clothes = async (req, res, next) => {
+  try {
+    // JWT에서 유저 정보 가져오기
+    const user_id = req.user.user_id;  // JWT 디코드된 정보에서 user_id 사용
+    const {clothes_id} = req.body;     // 요청 바디에서 clothes_id 추출
+
+    // 필수 필드 확인
+    if (!user_id || !clothes_id) {
+      return res.status(400).json({
+        error: 'Missing required fields: userId or clothes_id.',
+      });
+    }
+
+    // 1. 구매할 옷 정보 확인
+    const clothes = await Clothes.findOne({
+      where: {clothes_id, is_sale: true, is_sold: false},  // 판매 상태 확인
+    });
+
+    // 옷이 존재하지 않거나 이미 판매된 경우
+    if (!clothes) {
+      return res.status(404).json({
+        error: 'Clothes not found, already sold, or not available for sale.',
+      });
+    }
+
+    // 2. 판매 상태 업데이트 (is_sold = true)
+    const [updatedCount] = await Clothes.update(
+        {is_sold: true, is_sale: false},  // 판매된 상태로 변경
+        {where: {clothes_id}});
+
+    if (updatedCount === 0) {
+      return res.status(500).json({
+        error: 'Failed to update clothes status.',
+      });
+    }
+
+    // 3. 구매 성공 응답 반환
+    return res.status(200).json({
+      message: 'Clothes purchased successfully.',
+      purchasedClothes: {
+        clothes_id: clothes.clothes_id,
+        clothes_name: clothes.clothes_name,
+        price: clothes.price,
+        sold_to: user_id,
+      },
+    });
+  } catch (error) {
+    console.error('[MARKET PURCHASE ERROR]', error);
+    return res.status(500).json({
+      error: 'Failed to purchase clothes.',
+      details: error.message,
+    });
+  }
+};
