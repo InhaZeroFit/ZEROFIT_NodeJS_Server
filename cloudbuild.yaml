@@ -13,8 +13,7 @@ steps:
       - 'us-central1-b'
       - '--command'
       - |
-        'cd /home/logicallawbio/ZEROFIT_NodeJS_Server/ && \
-        git pull'
+      sleep 10 && cd /home/logicallawbio/ZEROFIT_NodeJS_Server && git pull
 
   # 3. PM2 서버 재시작
   - name: 'gcr.io/cloud-builders/gcloud'
