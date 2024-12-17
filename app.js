@@ -39,6 +39,7 @@ dotenv.config();
 // 3. Initialize application
 const app = express();
 app.set('port', process.env.PORT);
+app.set('trust proxy', 1);  // Set trust proxy
 app.set('view engine', 'html');
 nunjucks.configure('views', {
   express: app,
@@ -50,6 +51,7 @@ const global_limiter = ratelimit({
   windowMs: 1 * 60 * 1000,  // 1m
   max: 60,                  // 60 times a minute
   message: 'Too many requests, please try again later.',
+  keyGenerator: (req) => req.ip,  // Limit based on ip address
 });
 app.use(global_limiter);
 app.use(cors());
