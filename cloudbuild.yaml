@@ -26,10 +26,10 @@ steps:
       - 'us-central1-b'
       - '--command'
       - |
-        'cd /home/logicallawbio/ZEROFIT_NodeJS_Server && \
+        cd /home/logicallawbio/ZEROFIT_NodeJS_Server && \
         npm install && \
         npx pm2 kill && \
         npm run prod && \
-        npx pm2 logs'
+        npx pm2 logs
 
 logsBucket: 'gs://678969298134-us-central1-blueprint-config'  # 로그를 저장할 버킷 지정
