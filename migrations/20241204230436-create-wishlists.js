@@ -23,7 +23,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'users', // users 테이블 참조
+          model: 'users',
           key: 'user_id',
         },
         onDelete: 'CASCADE',
@@ -32,7 +32,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'clothes', // clothes 테이블 참조
+          model: 'clothes',
           key: 'clothes_id',
         },
         onDelete: 'CASCADE',

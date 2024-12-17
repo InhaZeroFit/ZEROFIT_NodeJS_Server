@@ -16,8 +16,8 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: true,
       references: {
-        model: 'users', // 참조할 테이블 이름
-        key: 'user_id', // 참조할 컬럼
+        model: 'users', 
+        key: 'user_id', 
       },
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL',
