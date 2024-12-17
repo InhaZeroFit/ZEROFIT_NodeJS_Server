@@ -17,7 +17,7 @@ const morgan = require('morgan');
 const cookie_parser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
-const ratelimit = require('express-rate-limit');
+// const ratelimit = require('express-rate-limit');
 const logger = require('./logs/logger');
 const hpp = require('hpp');
 const cors = require('cors');
@@ -46,12 +46,12 @@ nunjucks.configure('views', {
 });
 
 // 4. 보안 및 성능 관련 설정 (Rate Limit, CORS)
-const global_limiter = ratelimit({
-  windowMs: 1 * 60 * 1000,  // 1분
-  max: 10,                  // 1분에 최대 10회 요청
-  message: 'Too many requests, please try again later.',
-});
-app.use(global_limiter);
+// const global_limiter = ratelimit({
+//   windowMs: 1 * 60 * 1000,  // 1분
+//   max: 10,                  // 1분에 최대 10회 요청
+//   message: 'Too many requests, please try again later.',
+// });
+// app.use(global_limiter);
 app.use(cors());
 
 // 5. 미들웨어 설정
