@@ -9,8 +9,8 @@ steps:
       - 'compute'
       - 'scp'
       - '--recurse'
-      - '.'
-      - 'instance-20241121-093404:/home/logicallawbio/ZEROFIT_NodeJS_Server'
+      - './'
+      - 'instance-20241121-093404:/home/logicallawbio/ZEROFIT_NodeJS_Server/'
       - '--zone'
       - 'us-central1-b'
 
