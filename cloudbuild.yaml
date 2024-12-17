@@ -13,7 +13,8 @@ steps:
       - 'us-central1-b'
       - '--command'
       - |
-        sleep 10 && cd /home/logicallawbio/ZEROFIT_NodeJS_Server && git pull
+        git config --global --add safe.directory /home/logicallawbio/ZEROFIT_NodeJS_Server && \
+        cd /home/logicallawbio/ZEROFIT_NodeJS_Server && git pull
 
   # 3. PM2 서버 재시작
   - name: 'gcr.io/cloud-builders/gcloud'
