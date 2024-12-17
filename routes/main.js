@@ -16,4 +16,9 @@ dotenv.config();
 
 router.get('/', home);
 
+// GET /health
+router.get('/health', (req, res, next) => {
+  res.status(200).json({status: 'OK'});
+});
+
 module.exports = router;

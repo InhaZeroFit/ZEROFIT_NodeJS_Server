@@ -31,7 +31,6 @@ const auth_router = require('./routes/auth');
 const clothes_router = require('./routes/clothes');
 const market_router = require('./routes/market');
 const wishlist_router = require('./routes/wishlist');
-const api_router = require('./routes/api');
 const db = require('./models');
 
 // 2. 환경 설정
@@ -112,7 +111,6 @@ app.use('/auth', auth_router);
 app.use('/clothes', clothes_router);
 app.use('/market', market_router);
 app.use('/wishlist', wishlist_router);
-app.use('/api', api_router);
 
 // 9. 에러 핸들링 미들웨어
 app.use((req, res, next) => {
