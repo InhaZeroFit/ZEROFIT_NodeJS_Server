@@ -1,5 +1,5 @@
 steps:
-  # 1. 의존성 설치 (로컬 테스트 환경)
+  # 1. 의존성 설치 (테스트 환경)
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
 
@@ -24,6 +24,8 @@ steps:
       - 'us-central1-b'
       - '--command'
       - |
-        cd /home/logicallawbio/ZEROFIT_NodeJS_Server
-        npm install --production
-        npx pm2 restart zerofit-server || npx pm2 start server.js --name zerofit-server
+        'cd /home/logicallawbio/ZEROFIT_NodeJS_Server && \
+        npm install && \
+        npx pm2 kill && \
+        npm run prod && \
+        npx pm2 logs
