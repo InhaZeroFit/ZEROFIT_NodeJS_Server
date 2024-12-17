@@ -1,0 +1,29 @@
+steps:
+  # 1. 의존성 설치 (로컬 테스트 환경)
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+
+  # 2. GCP VM에 코드 전송 (SCP 사용)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'compute'
+      - 'scp'
+      - '--recurse'
+      - '.'
+      - 'instance-20241121-093404:/home/logicallawbio/ZEROFIT_NodeJS_Server'
+      - '--zone'
+      - 'us-central1-b'
+
+  # 3. GCP VM에서 PM2를 이용해 서버 재시작
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'compute'
+      - 'ssh'
+      - 'instance-20241121-093404'
+      - '--zone'
+      - 'us-central1-b'
+      - '--command'
+      - |
+        cd /home/logicallawbio/ZEROFIT_NodeJS_Server
+        npm install --production
+        npx pm2 restart zerofit-server || npx pm2 start server.js --name zerofit-server
