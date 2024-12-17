@@ -3,18 +3,18 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
 
-# 2. 코드 업데이트 (git pull 사용)
-- name: 'gcr.io/cloud-builders/gcloud'
-  args:
-    - 'compute'
-    - 'ssh'
-    - 'instance-20241121-093404'
-    - '--zone'
-    - 'us-central1-b'
-    - '--command'
-    - |
-      'cd /home/logicallawbio/ZEROFIT_NodeJS_Server && \
-      git pull'
+  # 2. 코드 업데이트 (git pull 사용)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'compute'
+      - 'ssh'
+      - 'instance-20241121-093404'
+      - '--zone'
+      - 'us-central1-b'
+      - '--command'
+      - |
+        'cd /home/logicallawbio/ZEROFIT_NodeJS_Server && \
+        git pull'
 
   # 3. PM2 서버 재시작
   - name: 'gcr.io/cloud-builders/gcloud'
