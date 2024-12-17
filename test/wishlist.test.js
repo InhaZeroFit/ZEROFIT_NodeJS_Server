@@ -8,6 +8,7 @@
  * Latest Updated Date: 2024-12-16
  */
 
+const db = require('../models');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -31,14 +32,19 @@ describe('Wishlist API Tests', () => {
     expect(res.status).toBe(200);
   });
 
+  afterAll(async () => {
+    // 테스트 종료 후 DB 정리
+    await db.sequelize.close();
+  });
+
   test('POST /wishlist/add - Add item to wishlist', async () => {
     const res = await request(app)
                     .post('/wishlist/add')
-                    .set('Authorization', `Bearer ${token}`)  // JWT 토큰
-    설정.send({
-      userId: 1,
-      clothes_id: 3,
-    });
+                    .set('Authorization', `Bearer ${token}`)
+                    .send({
+                      userId: 1,
+                      clothes_id: 3,
+                    });
 
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Item added to wishlist.');
