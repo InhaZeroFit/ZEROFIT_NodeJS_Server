@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const Sequelize = require('sequelize');
@@ -34,7 +34,7 @@ class Clothes extends Sequelize.Model {
             allowNull: false,
           },
           clothes_type: {
-            type: Sequelize.TEXT,  // JSON 데이터를 저장하기 위해 TEXT로 변경
+            type: Sequelize.TEXT,
             allowNull: false,
             get() {
               const rawValue = this.getDataValue('clothes_type');
@@ -45,7 +45,7 @@ class Clothes extends Sequelize.Model {
             },
           },
           clothes_style: {
-            type: Sequelize.TEXT,  // JSON 데이터를 저장하기 위해 TEXT로 변경
+            type: Sequelize.TEXT,
             allowNull: false,
             get() {
               const rawValue = this.getDataValue('clothes_style');
@@ -93,7 +93,6 @@ class Clothes extends Sequelize.Model {
             type: Sequelize.STRING(10),
             allowNull: true,
           },
-          // 옷 판매시 필요한 컬럼 추가
           is_sale: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
@@ -102,7 +101,7 @@ class Clothes extends Sequelize.Model {
           is_sold: {
             type: Sequelize.BOOLEAN,
             allowNull: true,
-            defaultValue: false,  // 기본값은 false (판매되지 않음)
+            defaultValue: false,
           },
           sold_to: {
             type: Sequelize.INTEGER,
@@ -117,7 +116,7 @@ class Clothes extends Sequelize.Model {
             allowNull: true,
           },
           sale_type: {
-            type: Sequelize.TEXT,  // JSON 데이터를 저장
+            type: Sequelize.TEXT,
             allowNull: true,
             get() {
               const rawValue = this.getDataValue('sale_type');

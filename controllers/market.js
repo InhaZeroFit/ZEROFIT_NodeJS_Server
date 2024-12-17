@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const fs = require('fs');
@@ -27,11 +27,10 @@ function ImageToBase64(imagePath) {
 
 exports.register_clothes = async (req, res, next) => {
   try {
-    // JWT에서 유저 정보 가져오기
-    const user_id = req.user.user_id;  // JWT 디코드된 정보에서 id 사용
+    const user_id = req.user.user_id;
 
     const {clothes_id, post_name, sale_type, price, bank_account} = req.body;
-    // 필수 필드 확인 (기존 필드 이름으로 변경)
+
     if (!user_id || !clothes_id || !post_name || !sale_type || !price ||
         !bank_account) {
       return res.status(400).json({
@@ -40,7 +39,7 @@ exports.register_clothes = async (req, res, next) => {
       });
     }
 
-    // 옷 정보 업데이트
+    // Update Clothes Information
     const [updatedClothesCount] = await Clothes.update(
         {
           is_sale: true,
@@ -49,28 +48,28 @@ exports.register_clothes = async (req, res, next) => {
           price: price,
         },
         {
-          where: {clothes_id},  // clothes_id 기준으로 업데이트
+          where: {clothes_id},  // Update based on clothes_id
         });
 
-    // 업데이트 결과 확인
+    // Check update results
     if (updatedClothesCount === 0) {
       return res.status(404).json({
         error: 'Clothes not found or no changes made.',
       });
     }
 
-    // 계좌 정보 업데이트
+    // Update Account Information
     const [updatedUserCount] =
         await User.update({bank_account: bank_account}, {where: {user_id}});
 
-    // 업데이트 결과 확인
+    // Check update results
     if (updatedUserCount === 0) {
       return res.status(404).json({
         error: 'User not found or no changes made.',
       });
     }
 
-    // 성공 응답
+    // Successful Response
     return res.status(200).json({
       message:
           'Clothes registered for sale and bank account updated successfully.',
@@ -86,8 +85,7 @@ exports.register_clothes = async (req, res, next) => {
 
 exports.market_info = async (req, res, next) => {
   try {
-    // JWT에서 유저 정보 가져오기
-    const user_id = req.user.user_id;  // JWT 디코드된 정보에서 id 사용
+    const user_id = req.user.user_id;
     const clothes = await Clothes.findAll({
       where: {
         user_id,
@@ -114,25 +112,26 @@ exports.market_info = async (req, res, next) => {
       });
     }
 
-    // Cloth 디렉토리 경로 설정
+    // Set the Cloth directory path
     const cloth_dir = path.join(__dirname, '../sam/results/cloth');
 
-    // clothes 배열을 순회하며 이미지 및 데이터를 포함한 새로운 구조 생성
+    // Create new structures, including images and data, while traversing the
+    // clotes array
     const clothes_with_images = clothes.map((item) => {
       const image_path = path.join(cloth_dir, `${item.image_name}.jpg`);
       let base64_image = null;
 
-      // 이미지가 존재할 경우 base64 변환
+      // base64 conversion if the image exists
       if (fs.existsSync(image_path)) {
         base64_image = ImageToBase64(image_path);
       } else {
         console.warn(`Image file not found: ${item.image_name}`);
       }
 
-      // 새로운 객체 생성
+      // Create a new object
       return {
         image_name: item.image_name,
-        base64_image,  // base64 변환된 이미지 추가
+        base64_image,  // Add base64 Converted Image
         clothes_name: item.clothes_name,
         rating: item.rating,
         clothes_type: item.clothes_type,
@@ -146,9 +145,9 @@ exports.market_info = async (req, res, next) => {
       };
     });
 
-    // 최종 결과 반환
+    // Return Final Results
     return res.status(200).json({
-      clothes: clothes_with_images,  // 이미지와 데이터를 포함한 배열
+      clothes: clothes_with_images,  // Array containing images and data
     });
 
   } catch (error) {
@@ -161,36 +160,34 @@ exports.market_info = async (req, res, next) => {
 };
 exports.purchase_clothes = async (req, res, next) => {
   try {
-    // JWT에서 유저 정보 가져오기
-    const user_id = req.user.user_id;  // JWT 디코드된 정보에서 user_id 사용
-    const {clothes_id} = req.body;     // 요청 바디에서 clothes_id 추출
+    const user_id = req.user.user_id;
+    const {clothes_id} = req.body;
 
-    // 필수 필드 확인
     if (!user_id || !clothes_id) {
       return res.status(400).json({
         error: 'Missing required fields: userId or clothes_id.',
       });
     }
 
-    // 1. 구매할 옷 정보 확인
+    // 1. Check clothing information to purchase
     const clothes = await Clothes.findOne({
-      where: {clothes_id, is_sale: true, is_sold: false},  // 판매 상태 확인
+      where: {clothes_id, is_sale: true, is_sold: false},  // Check Sales Status
     });
 
-    // 옷이 존재하지 않거나 이미 판매된 경우
+    // Clothes do not exist or have already been sold
     if (!clothes) {
       return res.status(404).json({
         error: 'Clothes not found, already sold, or not available for sale.',
       });
     }
 
-    // 2. 판매 상태 업데이트 (is_sold = true)
+    // 2. Update Sales Status (is_old = true)
     const [updatedCount] = await Clothes.update(
         {
           is_sold: true,
           is_sale: false,
           sold_to: user_id
-        },  // 판매된 상태로 변경
+        },  // Change to sold status
         {where: {clothes_id}});
 
     if (updatedCount === 0) {
@@ -199,7 +196,7 @@ exports.purchase_clothes = async (req, res, next) => {
       });
     }
 
-    // 3. 구매 성공 응답 반환
+    // 3. Return Purchase Success Response
     return res.status(200).json({
       message: 'Clothes purchased successfully.',
       purchasedClothes: {

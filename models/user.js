@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const Sequelize = require('sequelize');
@@ -71,13 +71,12 @@ class User extends Sequelize.Model {
           },
           login_at: {
             type: Sequelize.DATE,
-            allowNull: true,  // NULL means the user didn't login.
+            allowNull: true,
             defaultValue: Sequelize.DataTypes.NOW,
           },
-          // 옷 판매시 필요한 컬럼 추가
           bank_account: {
             type: Sequelize.STRING(30),
-            allowNull: true,  // 계좌번호는 필수 입력이 아닙니다.
+            allowNull: true,
           },
         },
         {
@@ -93,9 +92,9 @@ class User extends Sequelize.Model {
             // Before saving, check if name is null, and set it to email's
             // prefix
             beforeCreate: (user, options) => {
-              if (!user.name) {  // name이 null이거나 빈 값인 경우
-                const emailPrefix =
-                    user.email.split('@')[0];  // email의 '@' 앞부분
+              if (!user.name) {  // name is null or empty
+                const emailPrefix = user.email.split(
+                    '@')[0];  // The beginning of the '@' in the email
                 user.name = emailPrefix;
               }
             },
@@ -106,7 +105,7 @@ class User extends Sequelize.Model {
     db.User.hasMany(db.Clothes, {
       foreignKey: 'user_id',
       sourceKey: 'user_id',
-      as: 'Clothes', // 별칭 설정
+      as: 'Clothes',
     });
     db.User.hasMany(db.Market, {
       foreignKey: 'user_id',

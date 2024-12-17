@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const fs = require('fs');
@@ -27,14 +27,13 @@ function ImageToBase64(imagePath) {
 
 exports.add_to_wishlist = async (req, res) => {
   try {
-    const user_id = req.user.user_id;  // JWT에서 user_id 가져오기
+    const user_id = req.user.user_id;
     const {clothes_id} = req.body;
 
     if (!clothes_id) {
       return res.status(400).json({error: 'Clothes ID is required.'});
     }
 
-    // 위시리스트에 이미 등록되었는지 확인
     const existed_item = await Wishlist.findOne({
       where: {user_id, clothes_id},
     });
@@ -43,7 +42,7 @@ exports.add_to_wishlist = async (req, res) => {
       return res.status(400).json({error: 'Item is already in the wishlist.'});
     }
 
-    // 위시리스트에 추가
+    // Add to wish list
     const add_wishlist = await Wishlist.create({user_id, clothes_id});
     if (!add_wishlist || add_wishlist.length == 0) {
       return res.status(404).json({
@@ -59,15 +58,14 @@ exports.add_to_wishlist = async (req, res) => {
 };
 exports.get_wishlist = async (req, res) => {
   try {
-    const user_id = req.user.user_id;  // JWT에서 user_id 가져오기
+    const user_id = req.user.user_id;
 
-    // 위시리스트 조회
     const wishlist = await Wishlist.findAll({
       where: {user_id},
       include: [
         {
           model: Clothes,
-          as: 'Clothes', // 별칭 사용
+          as: 'Clothes', 
           attributes: [
             'clothes_id',
             'image_name',
@@ -89,35 +87,35 @@ exports.get_wishlist = async (req, res) => {
       return res.status(404).json({error: 'Your wishlist is empty.'});
     }
 
-    // Cloth 디렉토리 경로 설정
+    // Set the Cloth directory path
     const cloth_dir = path.join(__dirname, '../sam/results/cloth');
 
-    // clothes 배열을 순회하며 이미지 및 데이터를 포함한 새로운 구조 생성
+    // Create new structures, including images and data, while traversing the
+    // clotes array
     const wishlist_clothes_with_images =
         wishlist
             .map((item) => {
-              const clothes = item.Clothes;  // item.Clothe로 접근
+              const clothes = item.Clothes;  // Access item.Clothe
               if (!clothes) {
                 console.warn(`Missing Clothes data for wishlist item: ${item}`);
-                return null;  // Clothes 데이터가 없는 항목은 무시
+                return null;  // Ignore items without Clothes data
               }
 
               const image_path =
                   path.join(cloth_dir, `${clothes.image_name}.jpg`);
               let base64_image = null;
 
-              // 이미지가 존재할 경우 base64 변환
+              // base64 conversion if the image exists
               if (fs.existsSync(image_path)) {
                 base64_image = ImageToBase64(image_path);
               } else {
                 console.warn(`Image file not found: ${clothes.image_name}`);
               }
-
-              // 새로운 객체 생성
+              // Create a new object
               return {
                 clothes_id: clothes.clothes_id,
                 image_name: clothes.image_name,
-                base64_image,  // base64 변환된 이미지 추가
+                base64_image,  // Add base64 Converted Image
                 clothes_name: clothes.clothes_name,
                 rating: clothes.rating,
                 clothes_type: clothes.clothes_type,
@@ -129,7 +127,7 @@ exports.get_wishlist = async (req, res) => {
                 sale_type: clothes.sale_type,
               };
             })
-            .filter(Boolean);  // null 값을 제거하여 유효한 항목만 반환
+            .filter(Boolean);  // Remove null value to return only valid entries
 
     return res.status(200).json({clothes: wishlist_clothes_with_images});
   } catch (error) {

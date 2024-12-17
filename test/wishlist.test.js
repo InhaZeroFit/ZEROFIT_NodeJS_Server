@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const db = require('../models');
@@ -28,12 +28,12 @@ describe('Wishlist API Tests', () => {
     token = res.body.token;
     userId = res.body.userId;
 
-    // 응답이 올바른지 확인
+    // Verify that the response is correct
     expect(res.status).toBe(200);
   });
 
   afterAll(async () => {
-    // 테스트 종료 후 DB 정리
+    // Clean up the DB after the test
     await db.sequelize.close();
   });
 
@@ -59,7 +59,6 @@ describe('Wishlist API Tests', () => {
                     });
 
     expect(res.status).toBe(200);
-    expect(res.body.clothes).toBeInstanceOf(Array);  // clothes는 배열이어야
-    함
+    expect(res.body.clothes).toBeInstanceOf(Array);
   });
 });

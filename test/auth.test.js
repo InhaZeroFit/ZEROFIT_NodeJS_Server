@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const jwt = require('jsonwebtoken');
@@ -18,12 +18,12 @@ const app = `${process.env.TEST_SERVER_URL}`;
 
 describe('Auth API Tests', () => {
   beforeAll(async () => {
-    // 테스트 전 DB 초기화
+    // Pre-test DB initialization
     await db.sequelize.sync({force: true});
   });
 
   afterAll(async () => {
-    // 테스트 종료 후 DB 정리
+    // Clean up the DB after the test
     await db.sequelize.close();
   });
 
@@ -31,12 +31,12 @@ describe('Auth API Tests', () => {
     it('should create a new user', async () => {
       const userData = {
         email: 'test@example.com',
-        nick: '길동이 나선다',
+        nick: 'test',
         password: 'password123',
         phone_number: '01012345678',
-        name: '홍길동',
+        name: 'KimTest',
         gender: 'Male',
-        address: '서울시 영등포구 양평동 3가 현대 2차아파트',
+        address: 'Seoul',
         payment: 'Kakao pay',
       };
       const response = await request(app).post('/auth/join').send(userData);
@@ -62,12 +62,12 @@ describe('Auth API Tests', () => {
     it('should return 409 if email already exists', async () => {
       const userData = {
         email: 'test@example.com',
-        nick: '길동이 나선다',
+        nick: 'test',
         password: 'password123',
         phone_number: '01012345678',
-        name: '홍길동',
+        name: 'KimTest',
         gender: 'Male',
-        address: '서울시 영등포구 양평동 3가 현대 2차아파트',
+        address: 'Seoul',
         payment: 'Kakao pay',
       };
 

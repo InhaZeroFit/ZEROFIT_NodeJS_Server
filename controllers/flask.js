@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const fs = require('fs-extra');
@@ -15,7 +15,7 @@ const dotenv = require('dotenv');
 const {User} = require('../models');
 dotenv.config();
 
-// 환경 변수 검증
+// Verifying Environmental Variables
 if (!process.env.FLASK_SAM_HOST || !process.env.FLASK_SAM_PORT) {
   throw new Error('FLASK_SAM_HOST or FLASK_SAM_PORT is missing in .env file.');
 }
@@ -24,13 +24,13 @@ if (!process.env.FLASK_VITON_HOST || !process.env.FLASK_VITON_PORT) {
       'FLASK_VITON_HOST or FLASK_VITON_PORT is missing in .env file.');
 }
 
-// Flask 서버 URL 설정
+// Set Flask Server URL
 const flask_sam_url = `http://${process.env.FLASK_SAM_HOST}:${
     process.env.FLASK_SAM_PORT}/preprocess`;
 const flask_viton_url = `http://${process.env.FLASK_VITON_HOST}:${
     process.env.FLASK_VITON_PORT}/kolors`;
 
-// 저장 디렉토리 설정
+// Storage Directory Settings
 const base_sam_dir = path.join(__dirname, '../sam/results');
 const base_viton_dir = path.join(__dirname, '../viton');
 const sam_dirs = {
@@ -41,8 +41,7 @@ const viton_dirs = {
   results_dir: path.join(base_viton_dir, 'results'),
 };
 
-
-// 디렉토리 생성 함수
+// directory generation function
 function CreateDirectories(input_dir) {
   try {
     Object.values(input_dir).forEach((dir) => {
@@ -50,11 +49,11 @@ function CreateDirectories(input_dir) {
     });
   } catch (error) {
     console.error(`Error creating directories: ${error.message}`);
-    throw error;  // 필요시 예외 전달
+    throw error;
   }
 }
 
-// 응답 데이터를 저장하는 함수
+// Functions that store response data
 function SaveResponseData(response_data, directories, base_name) {
   for (const [key, base64_data] of Object.entries(response_data)) {
     try {
@@ -77,7 +76,7 @@ function SaveResponseData(response_data, directories, base_name) {
   }
 }
 
-// Flask 서버와 통신하고 응답 처리
+// Communicate with Flask servers and handle responses
 exports.send_preprocess_image_request =
     async (base64Image, input_point, base_name) => {
   try {
@@ -102,26 +101,25 @@ exports.send_preprocess_image_request =
     if (response.status === 200) {
       const response_data = response.data;
 
-      // 응답 데이터 저장
+      // Save Response Data
       SaveResponseData(response_data, sam_dirs, base_name);
 
       console.log('[upload_image] Flask preprocessing successful!');
-      return response.data;  // 성공한 경우 응답 데이터 반환
+      return response.data;  // Returns response data if successful
     } else {
       throw new Error(
           `Flask server error: ${response.status} ${response.data}`);
     }
   } catch (error) {
     console.error('Error processing image:', error.message);
-    throw error;  // 호출 함수에 예외 전달
+    throw error;  // Pass exception to call function
   }
 };
 
-// `send_virtual_fitting` 함수
 exports.send_virtual_fitting = async (json_payload, user_id) => {
   try {
     CreateDirectories(viton_dirs);
-    // Flask 서버로 요청 전송
+    // Send a request to the Flask server
     const response = await axios.post(flask_viton_url, json_payload, {
       headers: {'Content-Type': 'application/json'},
     });
@@ -129,28 +127,27 @@ exports.send_virtual_fitting = async (json_payload, user_id) => {
     if (response.status === 200) {
       const response_data = response.data;
 
-      // 'result' 키가 있는지 확인
+      // Check if there is a 'result' key
       if ('result' in response_data) {
         const base64_result = response_data.result;
 
-        // Base64 디코딩
+        // Base64 Decoding
         const image_buffer = Buffer.from(base64_result, 'base64');
 
-        // 가상 피팅 이미지 결과 저장 경로 설정
+        // Set virtual fitting image result storage path
         const save_dir = path.join(__dirname, '../viton/results');
         const output_name = `${Date.now()}-${user_id}`;
         const output_path = path.join(save_dir, `${output_name}.jpg`);
-
-        // 저장 디렉터리 존재 여부 검증
+        // Verifying the existence of a stored directory
         if (!fs.existsSync(save_dir)) {
           fs.mkdirSync(save_dir, {recursive: true});
         }
-        // 결과 이미지 저장
+        // Save result image
         fs.writeFileSync(output_path, image_buffer);
         console.log(
             `[virtual_fitting] Saved virtual fitting result to ${output_path}`);
 
-        return response_data;  // 성공한 경우 응답 데이터 반환
+        return response_data;  // Returns response data if successful
       } else {
         throw new Error('Error: \'result\' key not found in the response.');
       }
@@ -163,6 +160,6 @@ exports.send_virtual_fitting = async (json_payload, user_id) => {
     if (error.response) {
       console.error('Server response:', error.response.data);
     }
-    throw error;  // 호출 함수에 예외 전달
+    throw error;
   }
 };

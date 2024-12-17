@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const dotenv = require('dotenv');
@@ -37,7 +37,7 @@ module.exports = {
     logging : false,  // ide SQL query statements.
     port : process.env.SEQUELIZE_PORT,
     dialectOptions : {
-      connectTimeout : 6000,  // MySQL2에서 연결 시간 초과 설정
+      connectTimeout : 6000,  // Set connection timeout in MySQL2
     },
   },
 };

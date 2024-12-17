@@ -5,14 +5,14 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // 'size' 컬럼 수정
+// Modify 'size' column
     await queryInterface.changeColumn('clothes', 'size', {
       type: Sequelize.DataTypes.ENUM('S', 'M', 'L', 'XL', 'XXL', 'FREE'),
       allowNull: true,
@@ -59,7 +59,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    // 'size' 컬럼을 이전 상태로 복원 (원래 값으로 변경)
+// Restore 'size' column to previous state (change to original value)
     await queryInterface.changeColumn('clothes', 'size', {
       type: Sequelize.DataTypes.ENUM('90', '95', '100', '105', '110', 'Other'),
       allowNull: true,

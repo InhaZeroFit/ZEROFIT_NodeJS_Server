@@ -5,10 +5,10 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
-// 1. 모듈 임포트
+// 1. Import modules
 const express = require('express');
 const dotenv = require('dotenv');
 const nunjucks = require('nunjucks');
@@ -17,12 +17,12 @@ const morgan = require('morgan');
 const cookie_parser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
-// const ratelimit = require('express-rate-limit');
+const ratelimit = require('express-rate-limit');
 const logger = require('./logs/logger');
 const hpp = require('hpp');
 const cors = require('cors');
 
-// 커스텀 모듈
+// customed modules
 const passport_config = require('./passport');
 const redis_client = require('./config/redis');
 const RedisSessionStore = require('connect-redis').default;
@@ -33,10 +33,10 @@ const market_router = require('./routes/market');
 const wishlist_router = require('./routes/wishlist');
 const db = require('./models');
 
-// 2. 환경 설정
-dotenv.config();  // Load environment variables
+// 2. Set environmental variables
+dotenv.config();
 
-// 3. 애플리케이션 초기화
+// 3. Initialize application
 const app = express();
 app.set('port', process.env.PORT);
 app.set('view engine', 'html');
@@ -45,16 +45,16 @@ nunjucks.configure('views', {
   watch: true,
 });
 
-// 4. 보안 및 성능 관련 설정 (Rate Limit, CORS)
-// const global_limiter = ratelimit({
-//   windowMs: 1 * 60 * 1000,  // 1분
-//   max: 10,                  // 1분에 최대 10회 요청
-//   message: 'Too many requests, please try again later.',
-// });
-// app.use(global_limiter);
+// 4. Set security and performance (Rate limit, CORS)
+const global_limiter = ratelimit({
+  windowMs: 1 * 60 * 1000,  // 1m
+  max: 60,                  // 60 times a minute
+  message: 'Too many requests, please try again later.',
+});
+app.use(global_limiter);
 app.use(cors());
 
-// 5. 미들웨어 설정
+// 5. Set middlewares
 if (process.env.NODE_ENV == 'production') {
   app.use(morgan('combined'));  // Production logging
   app.use(hpp());               // Prevent HTTP parameter pollution
@@ -64,33 +64,33 @@ if (process.env.NODE_ENV == 'production') {
 app.use(express.static(path.join(__dirname, 'public')));  // Static file serving
 app.use(cookie_parser(process.env.COOKIE_SECRET));  // Cookie parser with secret
 app.use(express.json(
-    {limit: '10mb'}));  // JSON body parsing, JSON 요청 크기 제한 증가
+    {limit: '10mb'}));  // JSON body parsing, JSON request size limit increased
 app.use(express.urlencoded({
   limit: '10mb',
   extended: false
-}));  // URL-encoded body parsing, URL-encoded 요청 크기 제한 증가
+}));  // URL-encoded body parsing, URL-encoded request size limit increased
 
-// 세션 설정
+// Set session
 const session_options = {
   resave: false,
   saveUninitialized: false,
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    httpOnly: true,          // XSS 보호
-    secure: false,           // HTTPS 요청만 허용
-    sameSite: 'strict',      // CSRF 보호
-    maxAge: 1000 * 60 * 60,  // 1시간
+    httpOnly: true,
+    secure: false,
+    sameSite: 'strict',      // CSRF Protection
+    maxAge: 1000 * 60 * 60,  // 1 hours
   },
   store: new RedisSessionStore({client: redis_client}),
 };
 app.use(session(session_options));
 
-// 6. Passport 초기화
-passport_config();  // Passport 설정
+// 6. Set Passport
+passport_config();
 app.use(passport.initialize());
 app.use(passport.session());
 
-// 7. 데이터베이스 초기화
+// 7. Initialize data bases
 db.sequelize.sync({force: false})
     .then(() => {
       const host =
@@ -105,14 +105,14 @@ db.sequelize.sync({force: false})
           `[MySQL at ${host}] Error creating database tables:`, error);
     });
 
-// 8. 라우터 설정
+// 8. Set routers
 app.use('/', main_router);
 app.use('/auth', auth_router);
 app.use('/clothes', clothes_router);
 app.use('/market', market_router);
 app.use('/wishlist', wishlist_router);
 
-// 9. 에러 핸들링 미들웨어
+// 9. Error Handling Middleware
 app.use((req, res, next) => {
   const error = new Error(`Not existed ${req.method} ${req.url} routes.`);
   error.status = 404;
@@ -125,10 +125,10 @@ app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = process.env.NODE_ENV !== 'production' ?
       err :
-      {};  // 상세 에러는 개발 환경에서만
+      {};  // Detailed errors can only be found in a development environment
   res.status(err.status || 500);
   res.render('error');
 });
 
-// 10. 모듈 내보내기
+// 10. Export module
 module.exports = app;

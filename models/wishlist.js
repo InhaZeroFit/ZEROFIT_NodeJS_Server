@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const Sequelize = require('sequelize');
@@ -25,9 +25,9 @@ class Wishlist extends Sequelize.Model {
           sequelize,
           modelName: 'Wishlist',
           tableName: 'wishlists',
-          timestamps: true,   // createdAt, updatedAt 자동 생성
-          paranoid: true,     // 삭제된 데이터 복구 가능
-          underscored: true,  // snake_case
+          timestamps: true,
+          paranoid: true,
+          underscored: true,
           charset: 'utf8',
           collate: 'utf8_general_ci',
         });
@@ -41,7 +41,7 @@ class Wishlist extends Sequelize.Model {
     db.Wishlist.belongsTo(db.Clothes, {
       foreignKey: 'clothes_id',
       targetKey: 'clothes_id',
-      as: 'Clothes', // 별칭 설정
+      as: 'Clothes',
     });
   }
 }

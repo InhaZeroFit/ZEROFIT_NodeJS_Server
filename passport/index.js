@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const passport = require('passport');
@@ -20,15 +20,16 @@ module.exports = () => {
   });
   passport.deserializeUser((id, done) => {
     User.findOne({
-          where: {user_id: id},  // `user_id`로 조회
-          attributes:
-              ['user_id', 'email', 'nick', 'name'],  // 필요한 데이터만 포함
+          where: {user_id: id},  // Look up with 'user_id'
+          attributes: [
+            'user_id', 'email', 'nick', 'name'
+          ],  // Include only the data you need
         })
         .then(user => {
           if (!user) {
-            return done(null, false);  // 사용자 없음
+            return done(null, false);  // No User
           }
-          return done(null, user);  // 사용자 데이터 복원
+          return done(null, user);  // Restore User Data
         })
         .catch(error => done(error));
   })

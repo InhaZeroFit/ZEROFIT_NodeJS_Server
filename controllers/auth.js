@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const bcrypt = require('bcrypt');
@@ -74,7 +74,7 @@ exports.login = async (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({message: info.message});  // 인증 실패 시
+      return res.status(401).json({message: info.message});
     }
 
     return req.login(user, (loginError) => {
@@ -84,12 +84,12 @@ exports.login = async (req, res, next) => {
       }
       console.log('로그인 성공');
 
-      // JWT 토근 생성
+      // Make JWT Token
       const token = jwt.sign(
           {'user_id': user.user_id}, process.env.JWT_SECRET,
           {expiresIn: process.env.JWT_EXPIRES_IN});
 
-      // 로그인 성공 시 JSON 응답
+      // JSON Response on Successful Login
       return res.status(200).json({
         'token': token,
         message: 'Login successful',

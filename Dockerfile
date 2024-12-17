@@ -4,30 +4,30 @@
 # For full license text, see the LICENSE file in the root directory or at
 # https://opensource.org/license/mit
 # Author: Kim JunHo
-# Latest Updated Date: 2024-12-16
+# Latest Updated Date: 2024-12-18
 
-# Node.js 이미지 버전 고정
+# Fix Node.js Image Version
 FROM node:23.1.0
 
-# 작업 디렉터리 설정
+# Set working directory
 WORKDIR /app
 
-# 시스템 패키지 설치 (최소 설치)
+# Install System Packages (Minimum Installation)
 RUN apt-get update && apt-get install -y --no-install-recommends vim \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-# npm 캐시 최적화를 위해 package.json과 lock 파일만 복사
+# Copy only package.json and lock files for npm cache optimization
 COPY package.json package-lock.json ./
 
-# 종속성 설치
+# Install Dependencies
 RUN npm install
 
-# 애플리케이션 코드 복사
+# Copy application code
 COPY ./ ./
 
-# 컨테이너 포트 번호
+# Container Port Number
 EXPOSE 10103
 
-# 컨테이너 실행시 자동으로 아래 명령어 실행
+# Automatically execute the following commands when the container is executed
 CMD ["npm", "start"]

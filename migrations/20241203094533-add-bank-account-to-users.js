@@ -5,14 +5,14 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // `bank_account` 컬럼 추가
+// Add 'bank_account' column
     await queryInterface.addColumn('users', 'bank_account', {
       type: Sequelize.STRING(30),
       allowNull: true,
@@ -20,7 +20,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    // `bank_account` 컬럼 제거
+// Remove 'bank_account' column
     await queryInterface.removeColumn('users', 'bank_account');
   },
 };

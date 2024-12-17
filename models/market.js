@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const Sequelize = require('sequelize');
@@ -24,7 +24,7 @@ class Market extends Sequelize.Model {
           price: {
             type: Sequelize.INTEGER,
             allowNull: false,
-            defaultValue: 0,  // Check this line
+            defaultValue: 0,
           },
           period_sale: {
             type: Sequelize.INTEGER,
@@ -50,7 +50,7 @@ class Market extends Sequelize.Model {
     db.Market.belongsTo(db.Clothes, {
       foreignKey: 'clothes_id',
       targetKey: 'clothes_id',
-      as: 'Clothes', // 별칭 설정
+      as: 'Clothes',
     });
   };
 }

@@ -5,14 +5,14 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const redis = require('redis');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// Redis 클라이언트 설정
+// Redis Client Settings
 const redis_client = redis.createClient({
   url: `redis://${process.env.REDIS_HOST || '127.0.0.1'}:${
       process.env.REDIS_PORT}`,

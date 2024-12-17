@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-18
  */
 
 const passport = require('passport');
@@ -18,22 +18,22 @@ const User = db.User;
 module.exports = () => {
   passport.use(new LocalStrategy(
       {
-        usernameField: 'email',  // 클라이언트에서 보낼 필드 이름
+        usernameField: 'email',  // Name of the field to be sent from the client
         passwordField: 'password',
       },
       async (email, password, done) => {
         try {
-          // 이메일로 사용자 조회
+          // Email User Inquiry
           const user = await User.findOne({where: {email}});
 
-          // 사용자 존재 여부 확인
+          // Check the presence of a user
           if (!user) {
             return done(null, false, {
               message: '이메일 또는 비밀번호가 일치하지 않습니다.',
             });
           }
 
-          // 비밀번호 확인
+          // Check the password
           const isMatch = await bcrypt.compare(password, user.password);
           if (!isMatch) {
             return done(null, false, {
@@ -41,11 +41,11 @@ module.exports = () => {
             });
           }
 
-          // 인증 성공
+          // Authentication successful
           return done(null, user);
         } catch (error) {
           console.error(error);
-          return done(error);  // 서버 에러 발생 시
+          return done(error);  // When a server error occurs
         }
       }));
 };
