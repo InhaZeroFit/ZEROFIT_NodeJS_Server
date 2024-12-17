@@ -1,9 +1,9 @@
 steps:
-  # 1. 의존성 설치 (테스트 환경)
+  # 1. 의존성 설치
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
 
-  # 2. GCP VM에 코드 전송 (SCP 사용)
+  # 2. 코드 전송
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'compute'
@@ -14,7 +14,7 @@ steps:
       - '--zone'
       - 'us-central1-b'
 
-  # 3. GCP VM에서 PM2를 이용해 서버 재시작
+  # 3. PM2 서버 재시작
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'compute'
@@ -28,4 +28,6 @@ steps:
         npm install && \
         npx pm2 kill && \
         npm run prod && \
-        npx pm2 logs
+        npx pm2 logs'
+
+logsBucket: 'gs://678969298134-us-central1-blueprint-config'  # 로그를 저장할 버킷 지정
