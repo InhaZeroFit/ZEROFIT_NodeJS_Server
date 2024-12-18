@@ -278,7 +278,7 @@ exports.images_info = async (req, res, next) => {
     }
     // person_image path processing
     const person_image = user.person_image;
-    let person_base64_image = null;
+    let person_base64_image = null;  // base64_image is null for default image
 
     if (person_image && person_image != 'default_image') {
       // If you have a registered user image in the DB
@@ -294,10 +294,8 @@ exports.images_info = async (req, res, next) => {
         console.log(
             `[images_info] Person image file not found: ${person_image_path}`);
       }
-    } else {
-      // base64_image is null for default image
-      console.info('[images_info] User is using the default image.');
     }
+
     // Return Final Results
     return res.status(200).json({
       clothes: clothes_with_images,  // Array containing images and data
