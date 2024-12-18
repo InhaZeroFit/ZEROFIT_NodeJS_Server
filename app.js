@@ -24,8 +24,6 @@ const cors = require('cors');
 
 // customed modules
 const passport_config = require('./passport');
-const redis_client = require('./config/redis');
-const RedisSessionStore = require('connect-redis').default;
 const main_router = require('./routes/main');
 const auth_router = require('./routes/auth');
 const clothes_router = require('./routes/clothes');
@@ -83,7 +81,6 @@ const session_options = {
     sameSite: 'strict',      // CSRF Protection
     maxAge: 1000 * 60 * 60,  // 1 hours
   },
-  store: new RedisSessionStore({client: redis_client}),
 };
 app.use(session(session_options));
 
@@ -95,16 +92,19 @@ app.use(passport.session());
 // 7. Initialize data bases
 db.sequelize.sync({force: false})
     .then(() => {
-      const host =
-          process.env[`SEQUELIZE_${process.env.NODE_ENV.toUpperCase()}_HOST`];
-      console.log(`[MySQL at ${host}, ${
-          process.env.NODE_ENV}] Database & tables connected!`);
+      const node_env = process.env.NODE_ENV;
+      let host = '0.0.0.0';
+      if (node_env == 'production') {
+        host = process.env.SEQUELIZE_HOST;
+      } else if (node_env == 'development') {
+        host = process.env.SEQUELIZE_DEV_HOST;
+      } else {
+        host = process.env.SEQUELIZE_TEST_HOST;
+      }
+      console.log(`[MySQL at ${host}] Database & tables connected!`);
     })
     .catch((error) => {
-      const host =
-          process.env[`SEQUELIZE_${process.env.NODE_ENV.toUpperCase()}_HOST`];
-      console.error(
-          `[MySQL at ${host}] Error creating database tables:`, error);
+      console.error(`[MySQL] Error creating database tables:`, error);
     });
 
 // 8. Set routers
