@@ -11,7 +11,6 @@
 const fs = require('fs');
 const path = require('path');
 const {User, Clothes} = require('../models');
-const {Op} = require('sequelize');
 
 function ImageToBase64(imagePath) {
   try {
@@ -88,10 +87,7 @@ exports.market_info = async (req, res, next) => {
   try {
     const user_id = req.user.user_id;
     const clothes = await Clothes.findAll({
-      where: {
-        user_id: {[Op.ne]: user_id},  // 자신이 등록한 옷은 제외
-        is_sale: true,
-      },
+      where: Sequelize.literal(`user_id != ${user_id} AND is_sale = true`),
       attributes: [
         'image_name',
         'clothes_name',
