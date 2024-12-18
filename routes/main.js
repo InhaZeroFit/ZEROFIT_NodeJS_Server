@@ -21,9 +21,9 @@ router.get('/health', (req, res, next) => {
   res.status(200).json({status: 'OK'});
 });
 
-// GET /test
+// GET /example
 router.get(
-    '/test',
-    (req, res, next) => {res.status(200).json({message: 'CI/CD test'})})
+    '/example',
+    (req, res, next) => {res.status(200).json({status: 'OK EXAMPLE'})})
 
 module.exports = router;
