@@ -1,8 +1,10 @@
 # 👚 ZEROFIT_NODEJS_SERVER
-![app-image](public/app_image.png)  
+![zerofit-introduce-image](public/app_image.png)  
 
-이 프로젝트는 **Google Cloud Platform (GCP)**과 **AI 모델**을 활용하여 가상 피팅 서비스를 제공하는 서버입니다.  
-사용자는 앱을 통해 요청을 보내고, AI 기반으로 옷을 가상으로 입어본 이미지를 생성합니다.
+이 프로젝트는 **Google Cloud Platform (GCP)**과 **AI 모델(SAM2, KOLORS)**을 활용하여 나만의 옷장과 가상 피팅 서비스를 제공하는 서버입니다.  
+
+사용자는 나만의 옷장을 통해 옷을 관리하고 의류장터에 옷을 판매하거나 구매할 수 있습니다.
+사용자는 AI 기반으로 원하는 옷을 피팅하고 스타일링을 추천받을 수 있습니다.
 
 ---
 
@@ -14,7 +16,7 @@
 | 김철수        | AI       | [김철수](https://github.com/username2) |
 | 이영희        | 프론트엔드    | [이영희](https://github.com/username3) |
 | 국영희        | 프론트엔드    | [국영희](https://github.com/username3) |
-| 박지민        | 백엔드     | [박지민](https://github.com/username4) |
+| 박지민        | 백엔드     | [박지민](https://github.com/logicallaw) |
 
 ---
 
@@ -33,7 +35,7 @@
 
 ## 🗂️ 프로젝트 아키텍처
 
-![be-architecture](public/architecture.png)  
+![project-architecture-image](public/architecture.png)  
 
 1. **클라이언트 요청**  
    - 사용자가 요청을 보내면 GCP Load Balancer를 통해 Express.js 서버로 전달됩니다.
@@ -44,7 +46,7 @@
 
 3. **AI 서버**  
    - SAM2 모델을 사용해 전처리된 의류 데이터를 생성합니다.  
-   - 가상 피팅 서버는 최종 가상 착용 이미지를 반환합니다.
+   - 가상 피팅 서버는 KlingAI 서버로 api 요청을 보내고 응답으로 최종 가상 착용 이미지를 반환합니다.
 
 ---
 
@@ -54,8 +56,8 @@
 
 아래 소프트웨어 및 도구가 필요합니다:
 
-- **Node.js** (v18 이상 권장)  
-- **npm** 또는 **Yarn**  
+- **Node.js** (v23.1.0 이상 권장)
+- **npm** (v10.9.0 이상 권장)
 - **MySQL 데이터베이스**  
 - **Google Cloud 계정** 및 설정된 프로젝트  
 - **PM2** (서버 프로세스 관리용)
@@ -73,11 +75,44 @@
    npm install
 3. **환경 변수 설정**
    ```bash
-   PORT=10103
-   DB_HOST=your-cloud-sql-host
-   DB_USER=your-db-username
-   DB_PASSWORD=your-db-password
-   DB_NAME=your-db-name
+   COOKIE_SECRET = your-cookie-secret
+
+   # Connect to GCP MySQL - PROD
+   SEQUELIZE_USERNAME = your-db-username
+   SEQUELIZE_PASSWORD = your-db-password
+   SEQUELIZE_DB_PROD = your-db-name
+
+   SEQUELIZE_HOST = your-cloud-sql-host
+   SEQUELIZE_PORT = your-cloud-sql-port
+
+   # Connect to local MySQL - DEV
+   SEQUELIZE_DEV_USERNAME = your-db-username
+   SEQUELIZE_DEV_PASSWORD = your-db-password
+   SEQUELIZE_DEV_DB = your-db-name
+
+   SEQUELIZE_DEV_HOST = your-cloud-sql-host
+   SEQUELIZE_DEV_PORT = your-cloud-sql-port
+
+   # Connect to local MySQL - TEST 
+   SEQUELIZE_TEST_USERNAME = your-db-username
+   SEQUELIZE_TEST_PASSWORD = your-db-password
+   SEQUELIZE_TEST_DB = your-db-name
+
+   SEQUELIZE_TEST_HOST =  your-cloud-sql-host
+   SEQUELIZE_TEST_PORT = your-cloud-sql-port
+   TEST_SERVER_URL = your-cloud-sql-url
+
+   # FLASK SAM
+   FLASK_SAM_HOST = your-flask-sam-host
+   FLASK_SAM_PORT = your-flask-sam-port
+
+   # FLASK KOLORS
+   FLASK_KOLORS_HOST = your-flask-kolors-host
+   FLASK_KOLORS_PORT = your-flask-kolors-port
+
+   # JWT SECRET
+   JWT_SECRET = your-jwt-secret
+   JWT_EXPIRES_IN= your-jwt-expires-in
    ```
 4. **서버 실행**
    ```bash
@@ -85,7 +120,7 @@
    ```
 5. **PM2 프로세스 관리**
    ```bash
-   npx pm2 start server.js
+   npx pm2 monit
    ```
 ## 📡 API 사용법
 
@@ -94,13 +129,11 @@
 1. **Endpoint: POST /preprocess**
    설명: 이미지 전처리 요청을 보내 SAM2 모델이 옷 데이터를 생성합니다.
    ```bash
-   // Request
    {
     "image_url": "https://example.com/image.jpg"
    }
    ```
    ```bash
-   // Response
    {
     "status": "success",
     "preprocessed_image": "https://example.com/preprocessed-image.jpg"
@@ -112,14 +145,12 @@
 1. **Endpoint: POST /virtual-try-on**
    설명: 사용자의 이미지를 가상으로 피팅한 결과를 반환합니다.
    ```bash
-   // Request
    {
     "user_image_url": "https://example.com/user.jpg",
     "clothes_image_url": "https://example.com/clothes.jpg"
    }
    ```
    ```bash
-   // Response
    {
     "status": "success",
     "virtual_fitted_image": "https://example.com/virtual-fitted.jpg"

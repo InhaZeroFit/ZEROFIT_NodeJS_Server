@@ -21,4 +21,4 @@ public/uploads/clothes/
 .vscode/
 
 # docs 폴더
-docs/
+docs/sample-requests/auth/
