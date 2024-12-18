@@ -28,7 +28,7 @@
   - GCP VM Instances (Auto-scaling)  
   - GCP Cloud Load Balancer  
   - GCP Cloud Build (CI/CD)  
-- **AI Framework**: SAM2 모델  
+- **AI Models**: SAM2, KOLORS  
 - **GPU Server**: NVIDIA A40 (Inha University AI Convergence Research Center)  
 
 ---
