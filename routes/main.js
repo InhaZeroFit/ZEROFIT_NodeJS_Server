@@ -12,6 +12,7 @@ const express = require('express');
 const {home} = require('../controllers/main');
 const router = express.Router();
 const dotenv = require('dotenv');
+const {json} = require('sequelize');
 dotenv.config();
 
 router.get('/', home);
@@ -19,6 +20,10 @@ router.get('/', home);
 // GET /health
 router.get('/health', (req, res, next) => {
   res.status(200).json({status: 'OK'});
+});
+
+router.get('/test', (req, res, next) => {
+  res.status(200), json({message: 'success!'});
 });
 
 module.exports = router;
