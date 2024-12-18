@@ -22,7 +22,7 @@
 
 ## ⚙️ 기술 스택
 
-- **Backend**: Node.js, Express.js  
+- **Backend**: Node.js, Express.js, Flask
 - **Database**: Cloud SQL (MySQL)  
 - **Cloud Provider**: Google Cloud Platform (GCP)  
   - GCP VM Instances (Auto-scaling)  
