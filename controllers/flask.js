@@ -19,26 +19,26 @@ dotenv.config();
 if (!process.env.FLASK_SAM_HOST || !process.env.FLASK_SAM_PORT) {
   throw new Error('FLASK_SAM_HOST or FLASK_SAM_PORT is missing in .env file.');
 }
-if (!process.env.FLASK_VITON_HOST || !process.env.FLASK_VITON_PORT) {
+if (!process.env.FLASK_KOLORS_HOST || !process.env.FLASK_KOLORS_PORT) {
   throw new Error(
-      'FLASK_VITON_HOST or FLASK_VITON_PORT is missing in .env file.');
+      'FLASK_KOLORS_HOST or FLASK_KOLORS_PORT is missing in .env file.');
 }
 
 // Set Flask Server URL
 const flask_sam_url = `http://${process.env.FLASK_SAM_HOST}:${
     process.env.FLASK_SAM_PORT}/preprocess`;
-const flask_viton_url = `http://${process.env.FLASK_VITON_HOST}:${
-    process.env.FLASK_VITON_PORT}/kolors`;
+const flask_kolors_url = `http://${process.env.FLASK_KOLORS_HOST}:${
+    process.env.FLASK_KOLORS_PORT}/kolors`;
 
 // Storage Directory Settings
 const base_sam_dir = path.join(__dirname, '../sam/results');
-const base_viton_dir = path.join(__dirname, '../viton');
+const base_kolors_dir = path.join(__dirname, '../kolors');
 const sam_dirs = {
   cloth_dir: path.join(base_sam_dir, 'cloth'),
   image_dir: path.join(base_sam_dir, 'image'),
 };
-const viton_dirs = {
-  results_dir: path.join(base_viton_dir, 'results'),
+const kolors_dirs = {
+  results_dir: path.join(base_kolors_dir, 'results'),
 };
 
 // directory generation function
@@ -65,7 +65,6 @@ function SaveResponseData(response_data, directories, base_name) {
           save_path = path.join(directories.cloth_dir, `${base_name}.jpg`);
           break;
         default:
-          console.log(`Unknown key: ${key}, skipping...`);
           continue;
       }
       fs.writeFileSync(save_path, img_buffer);
@@ -118,9 +117,9 @@ exports.send_preprocess_image_request =
 
 exports.send_virtual_fitting = async (json_payload, user_id) => {
   try {
-    CreateDirectories(viton_dirs);
+    CreateDirectories(kolors_dirs);
     // Send a request to the Flask server
-    const response = await axios.post(flask_viton_url, json_payload, {
+    const response = await axios.post(flask_kolors_url, json_payload, {
       headers: {'Content-Type': 'application/json'},
     });
 
@@ -135,7 +134,7 @@ exports.send_virtual_fitting = async (json_payload, user_id) => {
         const image_buffer = Buffer.from(base64_result, 'base64');
 
         // Set virtual fitting image result storage path
-        const save_dir = path.join(__dirname, '../viton/results');
+        const save_dir = path.join(__dirname, '../kolors/results');
         const output_name = `${Date.now()}-${user_id}`;
         const output_path = path.join(save_dir, `${output_name}.jpg`);
         // Verifying the existence of a stored directory
