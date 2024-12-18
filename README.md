@@ -188,7 +188,6 @@
 이 프로젝트는 MIT License를 따릅니다.
 
 ## 📝 문의
-궁금한 사항이 있으면 Issues에 등록하거나 아래 연락처로 문의해 주세요.
+궁금한 사항이 있으면 Issues에 등록하거나 아래 연락처로 문의 부탁드립니다.
  - Email: logicallawbio@gmail.com
  - GitHub: logicallaw
-   
