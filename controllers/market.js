@@ -11,7 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const {User, Clothes} = require('../models');
-
+const {Sequelize} = require('sequelize');
 function ImageToBase64(imagePath) {
   try {
     if (!fs.existsSync(imagePath)) {
