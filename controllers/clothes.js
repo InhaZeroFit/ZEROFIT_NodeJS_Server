@@ -284,19 +284,14 @@ exports.images_info = async (req, res, next) => {
       // If you have a registered user image in the DB
       const person_image_path =
           path.join(__dirname, `../sam/results/image/${person_image}.jpg`);
-
+      // User is using the saved person image from MySQL.
       if (fs.existsSync(person_image_path)) {
-        person_base64_image =
-            ImageToBase64(person_image_path);  // Converting to Base64
-        console.log(
-            '[images_info] User is using the saved person image from MySQL.');
-      } else {
-        console.log(
-            `[images_info] Person image file not found: ${person_image_path}`);
+        person_base64_image = ImageToBase64(person_image_path);
       }
+      // else : Person image file not found: ${person_image_path}`
     }
 
-    // Return Final Results
+    // Return clothes and person_base64_image
     return res.status(200).json({
       clothes: clothes_with_images,  // Array containing images and data
       person_base64_image: person_base64_image,  // Null for default image
