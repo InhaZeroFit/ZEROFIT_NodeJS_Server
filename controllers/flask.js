@@ -152,7 +152,7 @@ exports.send_virtual_fitting = async (json_payload, user_id) => {
       }
     } else {
       throw new Error(
-          `VITON server error: ${response.status} ${response.data}`);
+          `KOLORS server error: ${response.status} ${response.data}`);
     }
   } catch (error) {
     console.error('Error during virtual fitting:', error.message);
