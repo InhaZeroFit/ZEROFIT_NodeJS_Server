@@ -19,31 +19,6 @@
 | 박지민        | 백엔드     | [logicallaw](https://github.com/logicallaw) |
 
 ---
-## 프로젝트 구조
-ZEROFIT_NodeJS_Server/
-├── .github/                 # GitHub 관련 설정 파일
-├── config/                  # 설정 파일
-├── controllers/             # 컨트롤러: 요청 처리 로직
-├── docs/                    # 문서화 파일
-├── logs/                    # 로그 파일
-├── middlewares/             # 미들웨어 함수
-├── migrations/              # 데이터베이스 마이그레이션 파일
-├── models/                  # 데이터베이스 모델 정의
-├── passport/                # Passport 인증 관련 설정
-├── public/                  # 정적 파일 (이미지, CSS, JavaScript 등)
-├── routes/                  # 라우트 정의
-├── test/                    # 테스트 코드
-├── views/                   # 뷰 템플릿
-├── .dockerignore            # Docker에서 무시할 파일 목록
-├── .gitignore               # Git에서 무시할 파일 목록
-├── Dockerfile               # Docker 이미지 설정 파일
-├── LICENSE.txt              # 라이선스 정보
-├── README.md                # 프로젝트 설명서
-├── app.js                   # 애플리케이션 진입점
-├── cloudbuild.yaml          # Cloud Build 설정 파일
-├── package-lock.json        # 종속성 잠금 파일
-├── package.json             # 프로젝트 메타데이터 및 종속성 목록
-└── server.js                # 서버 설정 및 실행 파일
 
 ## ⚙️ 기술 스택
 
