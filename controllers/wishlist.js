@@ -78,7 +78,9 @@ exports.get_wishlist = async (req, res) => {
             'price',
             'post_name',
             'sale_type',
-          ],
+          ],where: {
+            is_sale: true,
+          },
         },
       ],
     });
