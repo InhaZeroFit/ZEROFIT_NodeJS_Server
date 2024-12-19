@@ -16,7 +16,7 @@
 | 김철수        | AI       | [김철수](https://github.com/username2) |
 | 이영희        | 프론트엔드    | [이영희](https://github.com/username3) |
 | 국영희        | 프론트엔드    | [국영희](https://github.com/username3) |
-| 박지민        | 백엔드     | [박지민](https://github.com/logicallaw) |
+| 박지민        | 백엔드     | [logicallaw](https://github.com/logicallaw) |
 
 ---
 ## 프로젝트 구조
