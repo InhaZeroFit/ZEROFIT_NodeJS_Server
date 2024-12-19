@@ -29,4 +29,4 @@ steps:
         cd /home/logicallawbio/ZEROFIT_NodeJS_Server && \
         npx pm2 reload all
         
-logsBucket: 'gs://678969298134-us-central1-blueprint-config'  # 로그를 저장할 버킷 지정
+logsBucket: 'gs://678969298134-us-central1-blueprint-config' 
