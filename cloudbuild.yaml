@@ -27,7 +27,8 @@ steps:
       - '--command'
       - |
         cd /home/logicallawbio/ZEROFIT_NodeJS_Server && \
-        npx pm2 reload all
+        npx pm2 kill && \
+        npm run prod
 
 # logsBucket
 logsBucket: 'gs://678969298134-us-central1-blueprint-config' 
