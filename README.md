@@ -127,7 +127,7 @@ This project was carried out in the following environment.
 
 ## 📡 How to use API
 You can refer to the following document for API usage.
-[API Usage Guide](docs/API_USAGE)
+[API Usage Guide](docs/API_USAGE.md)
 
 ## 🛠️ CI/CD pipeline
 
