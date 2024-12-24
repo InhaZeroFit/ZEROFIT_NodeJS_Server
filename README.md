@@ -19,7 +19,7 @@ Users can fit the clothes they want and get recommendations for styling based on
 | 김준호        | Backend     |
 ---
 
-## ⚙️ Tech Stack
+## ⚙️ Tech stacks
 
 - **Backend**: Node.js, Express.js, Flask
 - **Database**: Cloud SQL (MySQL)  
