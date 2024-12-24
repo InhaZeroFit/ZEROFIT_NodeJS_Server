@@ -1,25 +1,25 @@
 # 👚 ZEROFIT_NODEJS_SERVER
 ![zerofit-introduce-image](public/app_image.png)  
 
-이 프로젝트는 **Google Cloud Platform (GCP)**과 **AI 모델(SAM2, KOLORS)**을 활용하여 나만의 옷장과 가상 피팅 서비스를 제공하는 서버입니다.  
+This project is a server that utilizes **Google Cloud Platform (GCP)** and **AI Models (SAM2, KOLORS)** to provide your own wardrobe and virtual fitting services.  
 
-사용자는 나만의 옷장을 통해 옷을 관리하고 의류장터에 옷을 판매하거나 구매할 수 있습니다.
-사용자는 AI 기반으로 원하는 옷을 피팅하고 스타일링을 추천받을 수 있습니다.
+Users can manage their clothes through their own wardrobe and sell or purchase clothes at the clothing market.
+Users can fit the clothes they want and get recommendations for styling based on AI.
 
 ---
 
-## 👥 ZEROFIT Contributors
+## 👥 ZeroFit contributors
 
-| 이름          | 역할                |
+| name          | roles                |
 |---------------|---------------------|
-| 조맑음        | 팀 리더 / 기획 및 디자인 |
+| 조맑음        | Team leader / Planning and Design |
 | 임선종        | AI       |
-| 권태은        | 프론트엔드    |
-| 김경모        | 프론트엔드    |
-| 김준호        | 백엔드     |
+| 권태은        | Frontend    |
+| 김경모        | Frontend    |
+| 김준호        | Backend     |
 ---
 
-## ⚙️ 기술 스택
+## ⚙️ Tech Stack
 
 - **Backend**: Node.js, Express.js, Flask
 - **Database**: Cloud SQL (MySQL)  
@@ -32,51 +32,50 @@
 
 ---
 
-## 🗂️ 프로젝트 아키텍처
+## 🗂️ Project architecture
 
 ![project-architecture-image](public/architecture.png)  
 
-1. **클라이언트 요청**  
-   - 사용자가 요청을 보내면 GCP Load Balancer를 통해 Express.js 서버로 전달됩니다.
+1. **Client request**  
+   - When a user sends a request, it is forwarded to the Express.js server through the GCP Load Balancer.
+2. **GCP Express.js server**  
+   - The Express.js server sends CRUD requests to MySQL Cloud SQL.
+   - The image processing request is forwarded to the GPU Flask server.
 
-2. **GCP Express.js 서버**  
-   - Express.js 서버는 CRUD 요청을 MySQL Cloud SQL로 전송합니다.  
-   - 이미지 처리 요청은 GPU 서버로 전달됩니다.
+3. **Inha University Artificial Intelligence Convergence Research Center Flask server**  
+   - The Flask preprocessing server generates preprocessed garment data using the SAM2 model.
+   - The Flask virtual fitting server sends an api request to the KlingAI server as a request by Express.js and returns the final virtual worn image as a response. The image is sent to the GCP Node.js server for storage and management and returns the image to the Flutter.
 
-3. **학교 Flask 서버**  
-   - Flask 전처리 서버에서 SAM2 모델을 사용해 전처리된 의류 데이터를 생성합니다.  
-   - Flask 가상 피팅 서버는 Express.js에 의한 요청으로 KlingAI 서버로 api 요청을 보내고 응답으로 최종 가상 착용 이미지를 반환합니다. 해당 이미지는 GCP Node.js 서버로 전송되어 저장하고 관리되며 Flutter로 해당 이미지를 반환합니다.
-
-※  **GCP Load Balancer란?**  
-   - 로드밸런서란 클라이언트로부터 들어오는 요청을 여러 서버(인스턴스)로 분산시켜주는 시스템을 말합니다.
-   - 현재 저희 서버는 백엔드 인스턴스의 사용률이 80% 넘지 않도록 설정되어 있습니다.
-   - 만약, 백엔드 인스턴스 사용률이 80%를 초과하게 된다면 GCP의 오토스케일링이 새로운 서버(인스턴스)를 자동으로 생성하게 됩니다.
+※  **What is GCP Load Balancer**  
+   - A load balancer is a system that distributes incoming requests from clients across multiple servers (instances).
+   - Currently, our servers are set to use no more than 80% of the backend instances.
+   - If the backend instance utilization exceeds 80%, the GCP's autoscaling is a new server (instance).
 
 ---
 
-## 🚀 시작하기
+## 🚀 Start
 
-### 1. 요구사항
+### 1. Requirement
 
-아래 소프트웨어 및 도구가 필요합니다:
+This project was carried out in the following environment.
 
-- **Node.js** (v23.1.0 이상 권장)
-- **npm** (v10.9.0 이상 권장)
-- **MySQL 데이터베이스**  
-- **Google Cloud 계정** 및 설정된 프로젝트  
+- **Node.js v23.1.0** 
+- **npm v10.9.0** 
+- **MySQL v8.0** 
+- **Google Cloud Platform account** 
 
-### 2. 설치
+### 2. Install
 
-#### **로컬 환경 실행**
+#### **Copy your local environment**
 
-1. **레포지토리 클론**
+1. **Clone this repository**
    ```bash
    git clone https://github.com/your-username/ZEROFIT_NodeJS_Server.git
    cd ZEROFIT_NodeJS_Server
-2. **의존성 설치**
+2. **Install dependancy**
    ```bash
    npm install
-3. **환경 변수 설정**
+3. **Set environmental variables**
    ```bash
    COOKIE_SECRET = your-cookie-secret
 
@@ -117,75 +116,84 @@
    JWT_SECRET = your-jwt-secret
    JWT_EXPIRES_IN= your-jwt-expires-in
    ```
-4. **서버 실행**
+4. **Run production environment of Node.js server**
    ```bash
    npm run prod
    ```
-5. **PM2 프로세스 관리**
+5. **Monit Node.js with command below**
    ```bash
    npx pm2 monit
    ```
-## 📡 API 사용법
 
-### **전처리 요청 (Preprocess)**
+## 📡 API methods
+You can refer to the following document for API usage.
+[API Usage Guide](docs/API_USAGE)
 
-1. **Endpoint: POST /preprocess**
-   설명: 이미지 전처리 요청을 보내 SAM2 모델이 옷 데이터를 생성합니다.
-   ```bash
-   {
-    "image_url": "https://example.com/image.jpg"
-   }
-   ```
-   ```bash
-   {
-    "status": "success",
-    "preprocessed_image": "https://example.com/preprocessed-image.jpg"
-   }
-   ```
-   
-### **가상피팅 요청 (Virtual Try-On)**
-
-1. **Endpoint: POST /virtual-try-on**
-   설명: 사용자의 이미지를 가상으로 피팅한 결과를 반환합니다.
-   ```bash
-   {
-    "user_image_url": "https://example.com/user.jpg",
-    "clothes_image_url": "https://example.com/clothes.jpg"
-   }
-   ```
-   ```bash
-   {
-    "status": "success",
-    "virtual_fitted_image": "https://example.com/virtual-fitted.jpg"
-   }
-   ```
-
-## 🛠️ CI/CD 파이프라인
+## 🛠️ CI/CD pipeline
 
 ### **GCP Cloud Build & GitHub Actions**
-코드가 GitHub에 푸시되면 Cloud Build가 자동으로 서버를 빌드하고 배포합니다.
+For GCP Cloud Build, you must follow these steps.
+
+1. **Open cloudbuild.yaml**
+
+2. **'your-*' part needs to be modified**
+   ```bash
+   steps:
+   # 1. Install dependancy
+   - name: 'gcr.io/cloud-builders/npm'
+       args: ['install']
+
+   # 2. Update your repository using 'git pull'
+   - name: 'gcr.io/cloud-builders/gcloud'
+      args:
+         - 'compute'
+         - 'ssh'
+         - 'your-vm-instance'
+         - '--zone'
+         - 'your-vm-instance-timezone'
+         - '--command'
+         - |
+           git config --global --add safe.directory /home/your-github-account/ZEROFIT_NodeJS_Server && \
+           cd /home/your-github-account/ZEROFIT_NodeJS_Server && git pull
+
+   # 3. Restart your server using pm2
+   - name: 'gcr.io/cloud-builders/gcloud'
+      args:
+         - 'compute'
+         - 'ssh'
+         - 'your-vm-instance'
+         - '--zone'
+         - 'your-vm-instance-timezone'
+         - '--command'
+         - |
+           cd /home/your-github-account/ZEROFIT_NodeJS_Server && \
+           npx pm2 reload all
+
+   # logsBucket
+   logsBucket: 'gs://your-bucket-name' 
+   ```
 
 ## 🧑‍💻 기여 방법
 
-1. **이 레포지토리를 Fork하세요.**
-2. **새 브랜치를 생성하세요.**
+1. **Fork this repository**
+2. **Create a new branch**
    ```bash
-   git checkout -b feature/새기능
+   git checkout -b feature/your-new-feature-name your-remote-name/feature/your-new-feature-name
    ```
-3. **변경 사항을 커밋하세요.**
+3. **Commit your change logs**
    ```bash
-   git commit -m "Add 새 기능"
+   git commit -m "feat: add your-change-logs"
    ```
-4. **브랜치를 푸시하세요.**
+4. **Push your branch**
    ```bash
-   git push origin feature/새기능
+   git push your-remote-name feature/your-new-feature-name
    ```
-5. **Pull Request를 생성하세요.**
+5. **Create a pull request at github**
 
-## 📄 라이센스
-이 프로젝트는 MIT License를 따릅니다.
+## 📄 Licesne
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📝 문의
-궁금한 사항이 있으면 Issues에 등록하거나 아래 연락처로 문의 부탁드립니다.
+## 📝 Any questions
+If you have any questions, please register with Issues or contact us at the contact information below.
  - Email: logicallawbio@gmail.com
  - GitHub: logicallaw

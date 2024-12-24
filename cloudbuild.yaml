@@ -1,9 +1,9 @@
 steps:
-  # 1. 의존성 설치
+  # 1. Install dependancy
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
 
-  # 2. 코드 업데이트 (git pull 사용)
+  # 2. Update your repository using 'git pull'
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'compute'
@@ -16,7 +16,7 @@ steps:
         git config --global --add safe.directory /home/logicallawbio/ZEROFIT_NodeJS_Server && \
         cd /home/logicallawbio/ZEROFIT_NodeJS_Server && git pull
 
-  # 3. PM2 서버 재시작
+  # 3. Restart your server using pm2
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'compute'
