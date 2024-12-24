@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-18
+ * Latest Updated Date: 2024-12-24
  */
 
 // 1. Import modules
@@ -22,7 +22,7 @@ const logger = require('./logs/logger');
 const hpp = require('hpp');
 const cors = require('cors');
 
-// customed modules
+// Import custom modules
 const passport_config = require('./passport');
 const main_router = require('./routes/main');
 const auth_router = require('./routes/auth');

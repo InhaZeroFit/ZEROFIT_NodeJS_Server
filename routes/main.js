@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-24
  */
 
 const express = require('express');
@@ -14,6 +14,7 @@ const router = express.Router();
 const dotenv = require('dotenv');
 dotenv.config();
 
+// GET /
 router.get('/', home);
 
 // GET /health
