@@ -6,8 +6,8 @@
   "scripts": {
     "prod": "cross-env NODE_ENV=production PORT=10103 pm2 start server.js",
     "dev": "cross-env NODE_ENV=development PORT=10104 nodemon server.js",
-    "test": "cross-env NODE_ENV=test PORT=10104 nodemon server.js",
-    "jest": "jest wishlist.test.js"
+    "test": "cross-env NODE_ENV=test PORT=10105 nodemon server.js",
+    "jest": "jest"
   },
   "repository": {
     "type": "git",
