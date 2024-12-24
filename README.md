@@ -11,7 +11,7 @@ Users can fit the clothes they want and get recommendations for styling based on
 ## 👥 ZeroFit contributors
 
 | name          | roles                |
-|---------------|---------------------|
+|---------------|:---------------------|
 | 조맑음        | Team leader / Planning and Design |
 | 임선종        | AI       |
 | 권태은        | Frontend    |
