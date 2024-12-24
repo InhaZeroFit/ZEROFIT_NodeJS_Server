@@ -115,4 +115,13 @@ describe('Auth API Tests', () => {
       expect(response.body).toHaveProperty('message');
     });
   });
+
+  describe('GET /auth/logout', () => {
+    it('로그아웃 성공', async () => {
+      const response = await request(app).get('/auth/logout');
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('로그아웃 성공!');
+    });
+  });
 });
