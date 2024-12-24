@@ -8,13 +8,13 @@
  * Latest Updated Date: 2024-12-24
  */
 
+// 1. Import modules
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-dotenv.config();
 
-const db = require('../../models');
-const User = db.User;
+// 2. Set environmental variables
+dotenv.config();
 
 exports.login = async (req, res, next) => {
   passport.authenticate('local', (error, user, info) => {
@@ -29,7 +29,7 @@ exports.login = async (req, res, next) => {
 
     return req.login(user, (error) => {
       if (error) {
-        return res.status(500).json(
+        return res.status(501).json(
             {message: '로그인 실패', error: error.message});
       }
 
