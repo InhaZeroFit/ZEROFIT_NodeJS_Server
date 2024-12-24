@@ -125,7 +125,7 @@ This project was carried out in the following environment.
    npx pm2 monit
    ```
 
-## 📡 API methods
+## 📡 How to use API
 You can refer to the following document for API usage.
 [API Usage Guide](docs/API_USAGE)
 
@@ -173,7 +173,7 @@ For GCP Cloud Build, you must follow these steps.
    logsBucket: 'gs://your-bucket-name' 
    ```
 
-## 🧑‍💻 기여 방법
+## 🧑‍💻 How to contribute
 
 1. **Fork this repository**
 2. **Create a new branch**
