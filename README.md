@@ -10,14 +10,13 @@
 
 ## 👥 ZEROFIT Contributors
 
-| 이름          | 역할                | GitHub 프로필                      |
-|---------------|---------------------|-----------------------------------|
-| 홍길동        | 팀 리더 / 기획 및 디자인 | [홍길동](https://github.com/username1) |
-| 김철수        | AI       | [김철수](https://github.com/username2) |
-| 이영희        | 프론트엔드    | [이영희](https://github.com/username3) |
-| 국영희        | 프론트엔드    | [국영희](https://github.com/username3) |
-| 박지민        | 백엔드     | [logicallaw](https://github.com/logicallaw) |
-
+| 이름          | 역할                |
+|---------------|---------------------|
+| 조맑음        | 팀 리더 / 기획 및 디자인 |
+| 임선종        | AI       |
+| 권태은        | 프론트엔드    |
+| 김경모        | 프론트엔드    |
+| 김준호        | 백엔드     |
 ---
 
 ## ⚙️ 기술 스택
