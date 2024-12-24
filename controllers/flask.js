@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-18
+ * Latest Updated Date: 2024-12-24
  */
 
 const fs = require('fs-extra');
@@ -13,6 +13,7 @@ const path = require('path');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const {User} = require('../models');
+const {CreateDirectories, SaveResponseData} = require('./utils/file_utils');
 dotenv.config();
 
 // Verifying Environmental Variables
@@ -40,40 +41,6 @@ const sam_dirs = {
 const kolors_dirs = {
   results_dir: path.join(base_kolors_dir, 'results'),
 };
-
-// directory generation function
-function CreateDirectories(input_dir) {
-  try {
-    Object.values(input_dir).forEach((dir) => {
-      fs.ensureDirSync(dir);
-    });
-  } catch (error) {
-    console.error(`Error creating directories: ${error.message}`);
-    throw error;
-  }
-}
-
-// Functions that store response data
-function SaveResponseData(response_data, directories, base_name) {
-  for (const [key, base64_data] of Object.entries(response_data)) {
-    try {
-      const img_buffer = Buffer.from(base64_data, 'base64');
-      let save_path;
-
-      switch (key) {
-        case 'cloth':
-          save_path = path.join(directories.cloth_dir, `${base_name}.jpg`);
-          break;
-        default:
-          continue;
-      }
-      fs.writeFileSync(save_path, img_buffer);
-    } catch (error) {
-      console.error(
-          `Failed to save file for key: ${key}. Error: ${error.message}`);
-    }
-  }
-}
 
 // Communicate with Flask servers and handle responses
 exports.send_preprocess_image_request =

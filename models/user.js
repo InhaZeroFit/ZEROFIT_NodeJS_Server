@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-18
+ * Latest Updated Date: 2024-12-24
  */
 
 const Sequelize = require('sequelize');
@@ -53,52 +53,43 @@ class User extends Sequelize.Model {
           nick: {
             type: Sequelize.STRING(20),
             allowNull: true,
-            defaultValue: 'noname',
+            defaultValue: 'no_nick'
           },
           person_image: {
             type: Sequelize.STRING(100),
             allowNull: true,
-            defaultValue: 'default_image',
+            defaultValue: 'no_person_image',
           },
           profile_image: {
             type: Sequelize.STRING(100),
             allowNull: true,
-            defaultValue: 'default_image',
+            defaultValue: 'no_profile_image',
           },
           payment: {
             type: Sequelize.STRING(20),
             allowNull: true,
+            defaultValue: 'no_payment',
+          },
+          bank_account: {
+            type: Sequelize.STRING(30),
+            allowNull: true,
+            defaultValue: 'no_bank_account'
           },
           login_at: {
             type: Sequelize.DATE,
             allowNull: true,
             defaultValue: Sequelize.DataTypes.NOW,
           },
-          bank_account: {
-            type: Sequelize.STRING(30),
-            allowNull: true,
-          },
         },
         {
           sequelize,
-          timestamps: true,   // create automatically createdAt, updatedAt
-          underscored: true,  // set snake_case
+          timestamps: true,   // Create automatically createdAt, updatedAt
+          underscored: true,  // Set snake_case
           modelName: 'User',
           tableName: 'users',
-          paranoid: true,  // true is soft delete.
+          paranoid: true,  // Set soft delete
           charset: 'utf8',
           collate: 'utf8_general_ci',  // utf8_general_ci : option of Korean
-          hooks: {
-            // Before saving, check if name is null, and set it to email's
-            // prefix
-            beforeCreate: (user, options) => {
-              if (!user.name) {  // name is null or empty
-                const emailPrefix = user.email.split(
-                    '@')[0];  // The beginning of the '@' in the email
-                user.name = emailPrefix;
-              }
-            },
-          }
         })
   };
   static associate(db) {

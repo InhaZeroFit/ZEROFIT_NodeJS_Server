@@ -8,13 +8,13 @@
  * Latest Updated Date: 2024-12-24
  */
 
-const {join} = require('./auth/auth_join');
-const {login} = require('./auth/auth_login');
-const {logout} = require('./auth/auth_logout');
-
-const auth = {};
-auth.join = join;
-auth.login = login;
-auth.logout = logout;
-
-module.exports = auth;
+exports.logout = (req, res) => {
+  req.logout((error) => {
+    if (error) {
+      return res.status(500).json(
+          {message: '로그아웃 오류:', error: error.message});
+    }
+    req.session.destory
+    return res.status(200).json({message: '로그아웃 성공!'})
+  })
+};

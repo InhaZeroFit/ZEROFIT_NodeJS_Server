@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-24
  */
 
 const express = require('express');
@@ -18,7 +18,7 @@ router.post('/join', join);
 // POST /auth/login
 router.post('/login', login);
 
-// GET /auth/login
+// GET /auth/logout
 router.get('/logout', logout);
 
 module.exports = router;

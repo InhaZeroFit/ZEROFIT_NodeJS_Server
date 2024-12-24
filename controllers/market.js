@@ -5,25 +5,14 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-18
+ * Latest Updated Date: 2024-12-24
  */
 
 const fs = require('fs');
 const path = require('path');
 const {User, Clothes} = require('../models');
 const {Sequelize} = require('sequelize');
-function ImageToBase64(imagePath) {
-  try {
-    if (!fs.existsSync(imagePath)) {
-      throw new Error(`File not found: ${imagePath}`);
-    }
-    const imageBuffer = fs.readFileSync(imagePath);
-    return Buffer.from(imageBuffer).toString('base64');
-  } catch (error) {
-    console.error(`Error processing file at ${imagePath}:`, error.message);
-    throw error;
-  }
-}
+const {ImageToBase64} = require('./utils/file_utils')
 
 exports.register_clothes = async (req, res, next) => {
   try {
