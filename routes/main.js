@@ -12,7 +12,7 @@
 const express = require('express');
 
 // 2. Import controllers
-const {home} = require('../controllers/main');
+const {home, health} = require('../controllers/main');
 
 // Define express router
 const router = express.Router();
@@ -21,8 +21,6 @@ const router = express.Router();
 router.get('/', home);
 
 // GET /health
-router.get('/health', (req, res, next) => {
-  res.status(200).json({message: 'Health check is successful.'});
-});
+router.get('/health', health);
 
 module.exports = router;

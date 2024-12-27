@@ -11,8 +11,8 @@ logs/history
 .DS_Store
 
 # image 폴더
-sam/results/
-kolors/results/
+sam/
+kolors/
 
 # public 폴더
 public/uploads/clothes/

@@ -8,12 +8,11 @@
  * Latest Updated Date: 2024-12-27
  */
 
-// 1. Import custom modules
-const {home} = require('./main/main_home');
-const {health} = require('./main/main_health');
-
-const main = {};
-main.home = home;
-main.health = health;
-
-module.exports = main;
+exports.health = async (req, res, next) => {
+  try {
+    res.status(200).json({message: 'health check에 성공하였습니다.'});
+  } catch (error) {
+    return res.status(500).json(
+        {message: 'health check에 실패하였습니다.', error: error.message});
+  }
+};
