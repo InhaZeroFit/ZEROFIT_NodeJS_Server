@@ -5,16 +5,16 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
-const {register_clothes} = require('./market/market_register_clothes');
+const {sale} = require('./market/market_sale');
 const {info} = require('./market/market_info');
-const {purchase_clothes} = require('./market/market_purchase_clothes');
+const {purchase} = require('./market/market_purchase');
 
 const market = {};
-market.register_clothes = register_clothes;
+market.sale = sale;
 market.info = info;
-market.purchase_clothes = purchase_clothes;
+market.purchase = purchase;
 
 module.exports = market;

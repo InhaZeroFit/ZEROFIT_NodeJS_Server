@@ -5,27 +5,26 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
 // 1. Import modules
 const express = require('express');
 
 // 2. Import controllers
-const {register_clothes, market_info, purchase_clothes} =
-    require('../controllers/market');
+const {sale, info, purchase} = require('../controllers/market');
 const jwt_middleware = require('../middlewares/jwt_middleware');
 
 // Define express router
 const router = express.Router();
 
 // POST /market/sale
-router.post('/sale', jwt_middleware, register_clothes);
+router.post('/sale', jwt_middleware, sale);
 
 // POST /market/info
-router.post('/info', jwt_middleware, market_info);
+router.post('/info', jwt_middleware, info);
 
 // POST /market/purchase
-router.post('/purchase', jwt_middleware, purchase_clothes);
+router.post('/purchase', jwt_middleware, purchase);
 
 module.exports = router;

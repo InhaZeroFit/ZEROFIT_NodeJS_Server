@@ -5,16 +5,13 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
-// 1. Import modules
-const {Sequelize} = require('sequelize');
-
-// 2. Import custom modules
+// 1. Import custom modules
 const {User, Clothes} = require('../../models');
 
-exports.register_clothes = async (req, res, next) => {
+exports.sale = async (req, res, next) => {
   try {
     // 디코드된 JWT 토근으로부터 user_id 가져오기
     const user_id = req.user.user_id;
@@ -26,6 +23,7 @@ exports.register_clothes = async (req, res, next) => {
     if (!user_id || !clothes_id || !post_name || !sale_type || !price ||
         !bank_account) {
       return res.status(400).json({
+        message: '의류장터에 옷 등록을 실패하였습니다.',
         error: '요청 body에 일부 필드가 누락되었습니다.',
       });
     }
