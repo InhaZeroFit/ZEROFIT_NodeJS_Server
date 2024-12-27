@@ -10,7 +10,7 @@
 
 // 1. Import custom modules
 const {Clothes} = require('../../models');
-const {send_preprocess_image_request} = require('../flask');
+const {send_preprocess_image_request} = require('../flask.js');
 
 exports.upload_image = async (req, res, next) => {
   try {
@@ -79,6 +79,7 @@ exports.upload_image = async (req, res, next) => {
     return res.status(200).json({
       message: '이미지 전처리 및 옷 등록 성공적으로 되었습니다.',
       response: response_data,
+      base_name: base_name
     });
   } catch (error) {
     return res.status(500).json({

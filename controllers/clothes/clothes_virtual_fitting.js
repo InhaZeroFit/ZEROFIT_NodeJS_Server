@@ -9,13 +9,13 @@
  */
 
 // 1. Import modules
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 // 2. Import custom modules
 const {User} = require('../../models');
 const {ImageToBase64} = require('../utils/file_utils');
-const {send_virtual_fitting} = require('../flask');
+const {send_virtual_fitting} = require('../flask.js');
 
 exports.virtual_fitting = async (req, res, next) => {
   try {
@@ -33,7 +33,7 @@ exports.virtual_fitting = async (req, res, next) => {
     }
 
     // '~/sam/results' 디렉터리를 불러옵니다.
-    const load_dir = path.join(__dirname, '../sam/results');
+    const load_dir = path.join(__dirname, '../../sam/results');
     let person_image_path;
 
     /*
@@ -45,7 +45,7 @@ exports.virtual_fitting = async (req, res, next) => {
       const image_buffer = Buffer.from(person_base64_image, 'base64');
 
       // 상반신 이미지 저장할 디렉터리 정의
-      const save_dir = path.join(__dirname, '../sam/results/image');
+      const save_dir = path.join(__dirname, '../../sam/results/image');
       const output_name = `user-${user_id}`;
       const output_path = path.join(save_dir, `${output_name}.jpg`);
 

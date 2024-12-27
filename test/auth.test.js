@@ -16,7 +16,7 @@ const dotenv = require('dotenv');
 // 2. Import custom modules
 const db = require('../models');
 
-// 3. Set environmental variables
+// 3. Set environment variables
 dotenv.config();
 
 const app = `${process.env.TEST_SERVER_URL}`;

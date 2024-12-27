@@ -31,7 +31,7 @@ const market_router = require('./routes/market');
 const wishlist_router = require('./routes/wishlist');
 const db = require('./models');
 
-// 2. Set environmental variables
+// 2. Set environment variables
 dotenv.config();
 
 // 3. Initialize application

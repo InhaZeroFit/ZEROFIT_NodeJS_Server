@@ -34,7 +34,7 @@ exports.CreateDirectories = (input_dir) => {
   }
 };
 
-exports.SaveResponseData = (response_data, directories, base_name) => {
+exports.SavePreprocessImage = (response_data, directories, base_name) => {
   for (const [key, base64_data] of Object.entries(response_data)) {
     try {
       const img_buffer = Buffer.from(base64_data, 'base64');
@@ -44,8 +44,17 @@ exports.SaveResponseData = (response_data, directories, base_name) => {
         fs.writeFileSync(save_path, img_buffer);
       }
     } catch (error) {
-      console.error(
-          `Failed to save file for key: ${key}. Error: ${error.message}`);
+      console.error(error.message);
     }
+  }
+};
+
+exports.SaveVirtualFittingImage = (base64_image, directory, base_name) => {
+  try {
+    const save_path = path.join(directory, `${base_name}.jpg`);
+    const img_buffer = Buffer.from(base64_image, 'base64');
+    fs.writeFileSync(save_path, img_buffer);
+  } catch (error) {
+    console.error(error.message);
   }
 };
