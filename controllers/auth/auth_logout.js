@@ -15,6 +15,6 @@ exports.logout = (req, res) => {
           {message: '로그아웃 오류:', error: error.message});
     }
     req.session.destory
-    return res.status(200).json({message: '로그아웃 성공!'})
+    return res.status(200).json({message: '로그아웃 성공.'})
   })
 };

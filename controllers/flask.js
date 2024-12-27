@@ -34,10 +34,8 @@ const flask_kolors_url = `http://${process.env.FLASK_KOLORS_HOST}:${
 // Storage Directory Settings
 const base_sam_dir = path.join(__dirname, '../sam/results');
 const base_kolors_dir = path.join(__dirname, '../kolors');
-const sam_dirs = {
-  cloth_dir: path.join(base_sam_dir, 'cloth'),
-  image_dir: path.join(base_sam_dir, 'image'),
-};
+const sam_dirs =
+    [path.join(base_sam_dir, 'cloth'), path.join(base_sam_dir, 'image')];
 const kolors_dirs = {
   results_dir: path.join(base_kolors_dir, 'results'),
 };
@@ -46,7 +44,9 @@ const kolors_dirs = {
 exports.send_preprocess_image_request =
     async (base64Image, input_point, base_name) => {
   try {
-    CreateDirectories(base_sam_dir);
+    for (const sam_dir of sam_dirs) {
+      CreateDirectories(sam_dir);
+    }
 
     if (!base64Image || !input_point || !base_name) {
       return res.status(400).json({
@@ -70,7 +70,6 @@ exports.send_preprocess_image_request =
       // Save Response Data
       SaveResponseData(response_data, sam_dirs, base_name);
 
-      console.log('[upload_image] Flask preprocessing successful!');
       return response.data;  // Returns response data if successful
     } else {
       throw new Error(

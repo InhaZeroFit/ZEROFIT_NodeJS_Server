@@ -20,7 +20,7 @@ exports.login = async (req, res, next) => {
   passport.authenticate('local', (error, user, info) => {
     if (error) {
       return res.status(500).json(
-          {message: '내부 서버 오류', error: error.message});
+          {message: '내부 서버 오류.', error: error.message});
     }
 
     if (!user) {
@@ -30,18 +30,18 @@ exports.login = async (req, res, next) => {
     return req.login(user, (error) => {
       if (error) {
         return res.status(501).json(
-            {message: '로그인 실패', error: error.message});
+            {message: '로그인 실패.', error: error.message});
       }
 
-      // Make JWT Token
+      // JWT 토근 생성
       const token = jwt.sign(
           {'user_id': user.user_id}, process.env.JWT_SECRET,
           {expiresIn: process.env.JWT_EXPIRES_IN});
 
-      // JSON Response on Successful Login
+      // Flutter로 응답 결과 반환
       return res.status(200).json({
         'token': token,
-        message: '로그인 성공!',
+        message: '로그인 성공.',
       });
     });
   })(req, res, next);

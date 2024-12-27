@@ -90,7 +90,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // 7. Initialize data bases
-db.sequelize.sync({force: false})
+db.sequelize.sync({force: process.env.NODE_ENV === 'test'})
     .then(() => {
       const node_env = process.env.NODE_ENV;
       let host = '0.0.0.0';

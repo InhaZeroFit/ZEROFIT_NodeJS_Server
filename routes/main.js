@@ -8,18 +8,21 @@
  * Latest Updated Date: 2024-12-24
  */
 
+// 1. Import modules
 const express = require('express');
+
+// 2. Import controllers
 const {home} = require('../controllers/main');
+
+// Define express router
 const router = express.Router();
-const dotenv = require('dotenv');
-dotenv.config();
 
 // GET /
 router.get('/', home);
 
 // GET /health
 router.get('/health', (req, res, next) => {
-  res.status(200).json({status: 'OK'});
+  res.status(200).json({message: 'Health check is successful.'});
 });
 
 module.exports = router;

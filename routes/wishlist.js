@@ -5,13 +5,18 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-27
  */
 
+// 1. Import modules
 const express = require('express');
-const router = express.Router();
-const jwt_middleware = require('../middlewares/jwt_middleware');
+
+// 2. Import controllers
 const {add_to_wishlist, get_wishlist} = require('../controllers/wishlist');
+const jwt_middleware = require('../middlewares/jwt_middleware');
+
+// Define express router
+const router = express.Router();
 
 // GET /wishlist/info
 router.post('/info', jwt_middleware, get_wishlist);

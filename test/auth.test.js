@@ -15,21 +15,21 @@ const dotenv = require('dotenv');
 
 // 2. Import custom modules
 const db = require('../models');
-const app = `${process.env.TEST_SERVER_URL}`;
 
 // 3. Set environmental variables
 dotenv.config();
 
+const app = `${process.env.TEST_SERVER_URL}`;
+
 describe('Auth API Tests', () => {
+  beforeAll(async () => {
+    await db.sequelize.sync({force: true});
+  });
+
+  afterAll(async () => {
+    await db.sequelize.close();
+  });
   describe('POST /auth/join', () => {
-    beforeAll(async () => {
-      await db.sequelize.sync({force: true});
-    });
-
-    afterAll(async () => {
-      await db.sequelize.close();
-    });
-
     it('정상적인 회원가입', async () => {
       const request_body = {
         name: 'test',
@@ -41,7 +41,7 @@ describe('Auth API Tests', () => {
       const response = await request(app).post('/auth/join').send(request_body);
 
       expect(response.status).toBe(200);
-      expect(response.body.message).toBe('회원가입이 정상적으로 성공했습니다!');
+      expect(response.body.message).toBe('회원가입이 정상적으로 성공했습니다.');
       expect(response.body.user).toHaveProperty('id');
       expect(response.body.user.name).toBe(request_body.name);
       expect(response.body.user.email).toBe(request_body.email);
@@ -59,7 +59,7 @@ describe('Auth API Tests', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.message)
-          .toBe('필수적인 입력값이 누락: name or email or password or address');
+          .toBe('요청 body에 일부 필드가 누락되었습니다.');
     });
 
     it('이미 존재하는 이메일', async () => {
@@ -73,7 +73,7 @@ describe('Auth API Tests', () => {
       const response = await request(app).post('/auth/join').send(request_body);
 
       expect(response.status).toBe(409);
-      expect(response.body.message).toBe('이메일이 이미 존재합니다!');
+      expect(response.body.message).toBe('이메일이 이미 존재합니다.');
     });
   });
 
@@ -89,7 +89,7 @@ describe('Auth API Tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('token');
-      expect(response.body.message).toBe('로그인 성공!');
+      expect(response.body.message).toBe('로그인 성공.');
 
       const decoded = jwt.verify(response.body.token, process.env.JWT_SECRET);
       expect(decoded).toHaveProperty('user_id');
@@ -121,7 +121,7 @@ describe('Auth API Tests', () => {
       const response = await request(app).get('/auth/logout');
 
       expect(response.status).toBe(200);
-      expect(response.body.message).toBe('로그아웃 성공!');
+      expect(response.body.message).toBe('로그아웃 성공.');
     });
   });
 });

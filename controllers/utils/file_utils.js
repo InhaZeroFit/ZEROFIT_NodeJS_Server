@@ -8,9 +8,11 @@
  * Latest Updated Date: 2024-12-24
  */
 
-const fs = require('fs');
+// 1. Import modules
+const fs = require('fs-extra');
+const path = require('path');
 
-exports.ImageToBase64 = (image_path) => {
+exports.ImageToBase64 = (imagePath) => {
   try {
     if (!fs.existsSync(imagePath)) {
       throw new Error(`File not found: ${imagePath}`);
@@ -25,9 +27,7 @@ exports.ImageToBase64 = (image_path) => {
 
 exports.CreateDirectories = (input_dir) => {
   try {
-    Object.values(input_dir).forEach((dir) => {
-      fs.ensureDirSync(dir);
-    });
+    fs.ensureDirSync(input_dir);
   } catch (error) {
     console.error(`Error creating directories: ${error.message}`);
     throw error;
@@ -40,11 +40,9 @@ exports.SaveResponseData = (response_data, directories, base_name) => {
       const img_buffer = Buffer.from(base64_data, 'base64');
       let save_path;
       if (key == 'cloth') {
-        save_path = path.join(directories.cloth_dir, `${base_name}.jpg`);
-      } else {
-        continue;
+        save_path = path.join(directories[0], `${base_name}.jpg`);
+        fs.writeFileSync(save_path, img_buffer);
       }
-      fs.writeFileSync(save_path, img_buffer);
     } catch (error) {
       console.error(
           `Failed to save file for key: ${key}. Error: ${error.message}`);

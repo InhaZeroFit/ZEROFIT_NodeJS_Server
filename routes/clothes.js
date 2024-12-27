@@ -5,13 +5,18 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-16
+ * Latest Updated Date: 2024-12-27
  */
 
+// 1. Import moduels
 const express = require('express');
+
+// 2. Import controllers
 const {upload_image, virtual_fitting, images_info} =
     require('../controllers/clothes');
 const jwt_middleware = require('../middlewares/jwt_middleware');
+
+// Define express router
 const router = express.Router();
 
 // POST /clothes/upload_image
