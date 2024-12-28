@@ -8,9 +8,11 @@
  * Latest Updated Date: 2024-12-28
  */
 
+// 1. Import custom modules
 const {Wishlist} = require('../models');
 const {add} = require('../controllers/wishlist.js');
 
+// Define mock
 jest.mock(
     '../models', () => ({Wishlist: {findOne: jest.fn(), create: jest.fn()}}))
 

@@ -44,7 +44,6 @@ module.exports = () => {
           // Authentication successful
           return done(null, user);
         } catch (error) {
-          console.error(error);
           return done(error);  // When a server error occurs
         }
       }));
