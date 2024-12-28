@@ -9,8 +9,8 @@
  */
 
 // 1. Import custom modules
-const {home} = require('./main/main_home');
-const {health} = require('./main/main_health');
+const {home} = require('./main/home');
+const {health} = require('./main/health');
 
 const main = {};
 main.home = home;

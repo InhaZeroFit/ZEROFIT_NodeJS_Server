@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
 // 1. Import modules
@@ -31,7 +31,7 @@ const flask_kolors_url = `http://${process.env.FLASK_KOLORS_HOST}:${
 const base_kolors_dir = path.join(__dirname, '../../kolors');
 const kolors_dirs = path.join(base_kolors_dir, 'results');
 
-exports.send_virtual_fitting = async (json_payload, user_id) => {
+exports.virtual_fitting = async (json_payload, user_id) => {
   try {
     CreateDirectories(kolors_dirs);
 

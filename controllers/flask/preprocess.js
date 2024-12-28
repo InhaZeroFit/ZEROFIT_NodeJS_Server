@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
 // 1. Import modules
@@ -31,8 +31,7 @@ const base_sam_dir = path.join(__dirname, '../../sam/results');
 const sam_dirs =
     [path.join(base_sam_dir, 'cloth'), path.join(base_sam_dir, 'image')];
 
-exports.send_preprocess_image_request =
-    async (base64Image, input_point, base_name) => {
+exports.preprocess = async (base64Image, input_point, base_name) => {
   try {
     for (const sam_dir of sam_dirs) {
       CreateDirectories(sam_dir);

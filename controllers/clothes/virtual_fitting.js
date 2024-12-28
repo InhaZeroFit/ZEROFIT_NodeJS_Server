@@ -15,7 +15,7 @@ const path = require('path');
 // 2. Import custom modules
 const {User} = require('../../models/index.js');
 const {ImageToBase64} = require('../utils/file_utils.js');
-const {send_virtual_fitting} = require('../flask.js');
+const {virtual_fitting} = require('../flask.js');
 
 exports.virtual_fitting = async (req, res, next) => {
   try {
@@ -105,7 +105,7 @@ exports.virtual_fitting = async (req, res, next) => {
     };
 
     // KOLORS Flask 서버로 가상 피팅 요청
-    const response_data = await send_virtual_fitting(json_payload, user_id);
+    const response_data = await virtual_fitting(json_payload, user_id);
 
     // 응답 데이터 유효성 체크
     if (!response_data) {

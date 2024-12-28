@@ -10,7 +10,7 @@
 
 // 1. Import custom modules
 const {Clothes} = require('../../models/index.js');
-const {send_preprocess_image_request} = require('../flask.js');
+const {preprocess} = require('../flask.js');
 
 exports.upload = async (req, res, next) => {
   try {
@@ -46,8 +46,7 @@ exports.upload = async (req, res, next) => {
     const base_name = `${Date.now()}-${user_id}`;
 
     // SAM2 Flask 서버로 이미지 전처리 요청
-    const response_data = await send_preprocess_image_request(
-        base64Image, input_point, base_name);
+    const response_data = await preprocess(base64Image, input_point, base_name);
 
     // 응답 데이터 유효성 체크
     if (!response_data) {

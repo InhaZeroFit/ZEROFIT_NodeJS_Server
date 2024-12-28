@@ -5,12 +5,12 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-24
+ * Latest Updated Date: 2024-12-28
  */
 
-const {join} = require('./auth/auth_join');
-const {login} = require('./auth/auth_login');
-const {logout} = require('./auth/auth_logout');
+const {join} = require('./auth/join');
+const {login} = require('./auth/login');
+const {logout} = require('./auth/logout');
 
 const auth = {};
 auth.join = join;

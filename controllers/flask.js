@@ -5,15 +5,14 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
-const {send_preprocess_image_request} =
-    require('./flask/flask_send_preprocess_image_request');
-const {send_virtual_fitting} = require('./flask/flask_send_virtual_fitting');
+const {preprocess} = require('./flask/preprocess');
+const {virtual_fitting} = require('./flask/virtual_fitting');
 
 const flask = {};
-flask.send_preprocess_image_request = send_preprocess_image_request;
-flask.send_virtual_fitting = send_virtual_fitting;
+flask.preprocess = preprocess;
+flask.virtual_fitting = virtual_fitting;
 
 module.exports = flask;
