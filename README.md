@@ -19,6 +19,9 @@ Users can fit the clothes they want and get recommendations for styling based on
 | 김준호        | Backend     |
 ---
 
+## 📺 Demo video
+https://youtu.be/WEHREAqCjkY
+
 ## ⚙️ Tech stacks
 
 - **Backend**: Node.js, Express.js, Flask
@@ -30,6 +33,9 @@ Users can fit the clothes they want and get recommendations for styling based on
 - **AI Models**: SAM2, KOLORS  
 - **GPU Server**: NVIDIA A40 (Inha University AI Convergence Research Center)  
 
+## 📡 How to use API
+You can refer to the following document for API usage.
+[API Usage Guide](docs/API_USAGE.md)
 ---
 
 ## 🗂️ Project architecture
@@ -126,10 +132,6 @@ This project was carried out in the following environment.
    npx pm2 monit
    ```
 
-## 📡 How to use API
-You can refer to the following document for API usage.
-[API Usage Guide](docs/API_USAGE.md)
-
 ## 🛠️ CI/CD pipeline
 
 ### **GCP Cloud Build & GitHub Actions**
@@ -198,6 +200,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 If you have any questions, please register with Issues or contact us at the contact information below.
  - Email: logicallawbio@gmail.com
  - GitHub: logicallaw
-
-## 📺 Demo video
-https://youtu.be/WEHREAqCjkY
