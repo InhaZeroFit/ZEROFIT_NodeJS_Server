@@ -16,6 +16,7 @@ Users can seamlessly organize their wardrobe, engage in buying and selling cloth
 | Kim Jun-Ho     | Backend                           |
 
 ## 📺 Demo Video
+Experience the functionality of this project by watching the demo video:  
 [Watch the Demo](https://youtu.be/WEHREAqCjkY)
 
 ## 🚀 Start
@@ -92,9 +93,9 @@ This project was carried out in the following environment.
    ```
 ---
 
-## 📡 How to use API
-You can refer to the following document for API usage: 
-[API Usage Guide](docs/API_USAGE.md)
+## 📡 How to Use API
+This project provides a comprehensive API for seamless integration.
+For detailed instructions and examples, please refer to the [API Usage Guide](docs/API_USAGE.md).
 
 ## 🛠️ CI/CD pipeline
 
