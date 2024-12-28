@@ -1,5 +1,7 @@
 # 👚 ZEROFIT_NODEJS_SERVER
-![zerofit-introduce-image](public/app_image.png)  
+<div align="center">
+  <img src="public/app_image.png" alt="zerofit-introduce-image">
+</div>
 
 This project serves as the backend for providing advanced wardrobe management and virtual fitting solutions powered by **Google Cloud Platform (GCP)** and cutting-edge **AI models (SAM2, KOLORS)**.
 
