@@ -192,7 +192,7 @@ For GCP Cloud Build, you must follow these steps.
 5. **Create a pull request at github**
 
 ## 📄 Licesne
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
 
 ## 📝 Any questions
 If you have any questions, please register with Issues or contact us at the contact information below.
