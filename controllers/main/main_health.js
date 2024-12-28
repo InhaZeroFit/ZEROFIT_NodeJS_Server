@@ -10,7 +10,7 @@
 
 exports.health = async (req, res, next) => {
   try {
-    res.status(200).json({message: 'health check에 성공하였습니다.'});
+    return res.status(200).json({message: 'health check에 성공하였습니다.'});
   } catch (error) {
     return res.status(500).json(
         {message: 'health check에 실패하였습니다.', error: error.message});
