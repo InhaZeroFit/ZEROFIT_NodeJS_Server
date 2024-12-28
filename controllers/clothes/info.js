@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
 // 1. Import modules
@@ -13,10 +13,10 @@ const fs = require('fs');
 const path = require('path');
 
 // 2. Import custom modules
-const {Clothes} = require('../../models');
+const {User, Clothes} = require('../../models');
 const {ImageToBase64} = require('../utils/file_utils');
 
-exports.images_info = async (req, res, next) => {
+exports.info = async (req, res, next) => {
   try {
     // 디코드된 JWT 토근으로부터 user_id 가져오기
     const user_id = req.user.user_id;
@@ -39,7 +39,7 @@ exports.images_info = async (req, res, next) => {
     }
 
     // '~/sam/results/cloth' 디렉터리를 불러옵니다.
-    const cloth_dir = path.join(__dirname, '../sam/results/cloth');
+    const cloth_dir = path.join(__dirname, '../../sam/results/cloth');
 
     // clothes_with_images 배열을 생성합니다.
     const clothes_with_images = clothes.map((item) => {

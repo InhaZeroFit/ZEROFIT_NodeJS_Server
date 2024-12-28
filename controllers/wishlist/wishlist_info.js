@@ -10,8 +10,10 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const {Sequelize} = require('sequelize');
 
 const {Clothes, Wishlist} = require('../../models');
+const {ImageToBase64} = require('../utils/file_utils');
 
 exports.info = async (req, res) => {
   try {
@@ -37,9 +39,7 @@ exports.info = async (req, res) => {
               'price',
               'post_name',
               'sale_type',
-            ],where: {
-              is_sale: true,
-            },
+            ],where: Sequelize.literal(`is_sale = true`),
           },
         ],
       });

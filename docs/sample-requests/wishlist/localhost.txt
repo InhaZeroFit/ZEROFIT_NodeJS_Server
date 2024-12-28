@@ -1,0 +1,14 @@
+POST
+http://localhost:10104/wishlist/add
+
+{
+    "userId": 2,
+    "clothes_id": 1
+}
+
+POST
+http://localhost:10104/wishlist/info
+
+{
+    "userId": 2
+}

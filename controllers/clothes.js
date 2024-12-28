@@ -5,17 +5,17 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-25
+ * Latest Updated Date: 2024-12-28
  */
 
 // 1. Import custom modules
-const {upload_image} = require('./clothes/clothes_upload_image');
-const {virtual_fitting} = require('./clothes/clothes_virtual_fitting');
-const {images_info} = require('./clothes/clothes_images_info');
+const {upload} = require('./clothes/upload');
+const {virtual_fitting} = require('./clothes/virtual_fitting');
+const {info} = require('./clothes/info');
 
 const clothes = {};
-clothes.upload_image = upload_image;
+clothes.upload = upload;
 clothes.virtual_fitting = virtual_fitting;
-clothes.images_info = images_info;
+clothes.info = info;
 
 module.exports = clothes;

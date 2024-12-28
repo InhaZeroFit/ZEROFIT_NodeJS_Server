@@ -1,0 +1,20 @@
+{
+    "message": "나의 옷장을 성공적으로 불러왔습니다.",
+    "clothes": [
+        {
+            "image_name": "1735372787595-1",
+            "base64_image": "",
+            "clothes_name": "test-clothes",
+            "rating": "4",
+            "clothes_type": [
+                "상의"
+            ],
+            "clothes_style": [
+                "포멀"
+            ],
+            "memo": "no-memo",
+            "clothes_id": 1
+        }
+    ],
+    "person_base64_image": null
+}

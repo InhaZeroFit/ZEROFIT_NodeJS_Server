@@ -1,0 +1,26 @@
+POST
+http://localhost:10104/market/sale
+
+Request
+{
+    "userId": 1,
+    "clothes_id": 1,
+    "post_name": "급처분 합니다.",
+    "sale_type": ["직거래"],
+    "price": 5000,
+    "bank_account": "111-222-3333"
+}
+
+POST
+http://localhost:10104/market/info
+{
+    "userId": 2
+}
+
+POST
+http://localhost:10104/market/purchase
+
+{
+    "userId": 2,
+    "clothes_id": 1
+}

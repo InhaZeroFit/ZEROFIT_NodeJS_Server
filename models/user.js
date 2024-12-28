@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-24
+ * Latest Updated Date: 2024-12-28
  */
 
 const Sequelize = require('sequelize');
@@ -97,10 +97,6 @@ class User extends Sequelize.Model {
       foreignKey: 'user_id',
       sourceKey: 'user_id',
       as: 'Clothes',
-    });
-    db.User.hasMany(db.Market, {
-      foreignKey: 'user_id',
-      sourceKey: 'user_id',
     });
     db.User.hasMany(db.Wishlist, {
       foreignKey: 'user_id',

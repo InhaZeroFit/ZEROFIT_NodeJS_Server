@@ -5,14 +5,14 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
 // 1. Import custom modules
-const {Clothes} = require('../../models');
+const {Clothes} = require('../../models/index.js');
 const {send_preprocess_image_request} = require('../flask.js');
 
-exports.upload_image = async (req, res, next) => {
+exports.upload = async (req, res, next) => {
   try {
     // 디코드된 JWT 토근으로부터 user_id 가져오기
     const user_id = req.user.user_id;

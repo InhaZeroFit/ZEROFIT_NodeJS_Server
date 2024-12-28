@@ -8,9 +8,9 @@
  * Latest Updated Date: 2024-12-28
  */
 
-const {sale} = require('./market/market_sale');
-const {info} = require('./market/market_info');
-const {purchase} = require('./market/market_purchase');
+const {sale} = require('./market/sale');
+const {info} = require('./market/info');
+const {purchase} = require('./market/purchase');
 
 const market = {};
 market.sale = sale;

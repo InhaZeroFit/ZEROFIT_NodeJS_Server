@@ -1,0 +1,53 @@
+POST
+http://localhost:10104/auth/join
+
+Request
+{
+    "name":"test",
+    "email": "test@test.com",
+    "password": "12341234",
+    "address": "South Korea"
+}
+
+{
+    "name":"test2",
+    "email": "test2@test.com",
+    "password": "12341234",
+    "address": "South Korea"
+}
+
+Response (status:200)
+{
+    "message": "회원가입이 정상적으로 성공했습니다.",
+    "user": {
+        "id": 1,
+        "name": "test",
+        "email": "test@test.com",
+        "address": "South Korea"
+    }
+}
+
+POST
+http://localhost:10104/auth/login
+
+Request
+{
+    "email": "test@test.com",
+    "password": "12341234"
+}
+
+{
+    "email": "test2@test.com",
+    "password": "12341234"
+}
+
+Response
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3MzUzNzIzMzAsImV4cCI6MTczNTM3NTkzMH0.sy9FUVGYu-yKqa9q_TNdR1CvV89t7Bog0o7OwBVtePQ",
+    "message": "로그인 성공."
+}
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE3MzUzNzMzNzcsImV4cCI6MTczNTM3Njk3N30.IIuNaTb9iSSZnu3V_lHzYnHNwAXpVniF8qP6gne0Ym4",
+    "message": "로그인 성공."
+}

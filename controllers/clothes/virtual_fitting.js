@@ -5,7 +5,7 @@
  * For full license text, see the LICENSE file in the root directory or at
  * https://opensource.org/license/mit
  * Author: logicallaw
- * Latest Updated Date: 2024-12-27
+ * Latest Updated Date: 2024-12-28
  */
 
 // 1. Import modules
@@ -13,8 +13,8 @@ const fs = require('fs-extra');
 const path = require('path');
 
 // 2. Import custom modules
-const {User} = require('../../models');
-const {ImageToBase64} = require('../utils/file_utils');
+const {User} = require('../../models/index.js');
+const {ImageToBase64} = require('../utils/file_utils.js');
 const {send_virtual_fitting} = require('../flask.js');
 
 exports.virtual_fitting = async (req, res, next) => {

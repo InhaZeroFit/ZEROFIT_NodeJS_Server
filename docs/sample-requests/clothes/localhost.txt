@@ -1,0 +1,65 @@
+POST
+http://localhost:10104/clothes/upload_image
+
+Request
+
+upload_request.txt 확인
+
+Response.txt 확인
+Response (status:200)
+{
+    "message": "이미지 전처리 및 옷 등록 성공적으로 되었습니다.",
+    "response": {
+        "agnostic": "",
+        "agnostic_mask": "",
+        "cloth": "",
+        "cloth_mask": "",
+        "densepose": "",
+        "image": "",
+    },
+    "base_name": "1735372787595-1"
+}
+
+POST
+http://localhost:10104/clothes/info
+
+Request
+{
+    "userId": 1,
+}
+
+{
+    "userId": 2,
+}
+Response (status:200)
+{
+    "message": "나의 옷장을 성공적으로 불러왔습니다.",
+    "clothes": [
+        {
+            "image_name": "1735372787595-1",
+            "base64_image": "",
+            "clothes_name": "test-clothes",
+            "rating": "4",
+            "clothes_type": [
+                "상의"
+            ],
+            "clothes_style": [
+                "포멀"
+            ],
+            "memo": "no-memo",
+            "clothes_id": 1
+        }
+    ],
+    "person_base64_image": null
+}
+
+POST
+http://localhost:10104/clothes/virtual_fitting
+
+virtual_fitting/request.txt 확인
+
+Response (status:200)
+{
+    "message": "가상 피팅이 성공적으로 되었습니다.",
+    "base64_image": ""
+}
