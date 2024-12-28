@@ -1,27 +1,3 @@
-POST
-http://localhost:10104/market/sale
-
-Request
-{
-    "userId": 1,
-    "clothes_id": 1,
-    "post_name": "급처분 합니다.",
-    "sale_type": ["직거래"],
-    "price": 5000,
-    "bank_account": "111-222-3333"
-}
-
-Response
-{
-    "message": "의류장터에 옷 등록을 성공하였습니다."
-}
-
-POST
-http://localhost:10104/market/info
-{
-    "userId": 2
-}
-
 {
     "message": "의류장터를 성공적으로 불러왔습니다.",
     "clothes": [
@@ -46,14 +22,4 @@ http://localhost:10104/market/info
             "clothes_id": 1
         }
     ]
-}
-
-Response
-
-POST
-http://localhost:10104/market/purchase
-
-{
-    "userId": 2,
-    "clothes_id": 1
 }

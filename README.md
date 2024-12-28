@@ -62,6 +62,7 @@ This project was carried out in the following environment.
 - **Node.js v23.1.0** 
 - **npm v10.9.0** 
 - **MySQL v8.0** 
+- **UTF-8(There are some Korean notes)**
 - **Google Cloud Platform account** 
 
 ### 2. Install

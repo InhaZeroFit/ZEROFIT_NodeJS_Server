@@ -6,9 +6,41 @@ http://localhost:10104/wishlist/add
     "clothes_id": 1
 }
 
+Response
+{
+    "message": "위시리스트 등록이 완료되었습니다."
+}
+
 POST
 http://localhost:10104/wishlist/info
 
 {
     "userId": 2
+}
+
+Response
+{
+    "message": "위시리스트 불러오기를 성공하였습니다.",
+    "clothes": [
+        {
+            "clothes_id": 1,
+            "image_name": "1735372787595-1",
+            "base64_image": "base64-string",
+            "clothes_name": "test-clothes",
+            "rating": "4",
+            "clothes_type": [
+                "상의"
+            ],
+            "clothes_style": [
+                "포멀"
+            ],
+            "memo": "no-memo",
+            "size": null,
+            "price": 5000,
+            "post_name": "급처분 합니다.",
+            "sale_type": [
+                "직거래"
+            ]
+        }
+    ]
 }
