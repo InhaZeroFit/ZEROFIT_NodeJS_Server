@@ -12,16 +12,16 @@
 const express = require('express');
 
 // 2. Import controllers
-const {add_to_wishlist, get_wishlist} = require('../controllers/wishlist');
+const {add, info} = require('../controllers/wishlist');
 const jwt_middleware = require('../middlewares/jwt_middleware');
 
 // Define express router
 const router = express.Router();
 
 // GET /wishlist/info
-router.post('/info', jwt_middleware, get_wishlist);
+router.post('/info', jwt_middleware, info);
 
 // POST /wishlist/add
-router.post('/add', jwt_middleware, add_to_wishlist);
+router.post('/add', jwt_middleware, add);
 
 module.exports = router;

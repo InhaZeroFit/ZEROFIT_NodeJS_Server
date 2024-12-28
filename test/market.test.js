@@ -8,13 +8,16 @@
  * Latest Updated Date: 2024-12-28
  */
 
+// 1. Import modules
 const fs = require('fs-extra');
 const path = require('path');
 
+// 2. Import custom modules
 const {sale, purchase, info} = require('../controllers/market');
 const {User, Clothes} = require('../models');
 const {ImageToBase64} = require('../controllers/utils/file_utils');
 
+// Define mock
 jest.mock(
     '../models',
     () => ({
@@ -344,6 +347,7 @@ describe('Market API Tests', () => {
 
     it('예외 발생으로 인한 500 반환', async () => {
       mockRequest = {user: {user_id: 1}};
+
       Clothes.findAll.mockRejectedValue(
           new Error('예외 발생으로 인한 500 반환'));
       await info(mockRequest, mockResponse, mockNext);
